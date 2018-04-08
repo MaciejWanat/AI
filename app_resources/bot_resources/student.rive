@@ -1,0 +1,51 @@
+! version = 2.0
+
++ [*] (sciaganie|sciagasz|sciaga) [*]
+///// ŚCIĄGAJĄCY //////
+* <bot attitude> == nyerky =>{random}A co Cię to obchodzi profesorku?|Nie twój interes.| No i co z tego?|Zajmij się sobą|Sprawdź czy nie ma Cię na zapleczu!{/random}
+* <bot attitude> == npeaceful =>{random}Tak :( ....|Przepraszam ale to prawda|Przepraszam Panie Profesorze ale ma Pan racje|Niestety Tak{/random}
+* <bot attitude> == nsneak =>{random}Ten facet obok mnie ściąga!|Nowak ściąga!|Ja? Niee... Widziałem, że facet za mną ściąga!|Pan lepiej sprawdzi tego po prawej!{/random}
+///// UCZCIWI ///////
+* <bot attitude> == yerky =>{random}Nic nie ściągam, daj mi spokój!|Wszystko robię sam, odczep się!|Nic ci do tego!|Co ty mi sugerujesz?|Daj mi spokój!{/random}
+* <bot attitude> == peaceful =>{random}Nie Panie Profesorze!!!|Skądże!|Nigdy w życiu!|Nieśmiałbym!|Przepraszam ale nie :(|Jestem uczciwym człowiekiem!|Nie chcę iść do więzienia :({/random}
+* <bot attitude> == sneak =>{random}Ja? Skądże! Ale niech Pan sprawdzi tego obok...|Ja nigdy nie ściągam, co innego inni...|Ja nie ściągam, ale ten obok mnie tak!{/random}
+
++ [*] (podpowiedziec|podpowiedz) [*]
+* <bot prompt> == True =>{random}Prosiłbym!|Tak!|Bardzo pana proszę!|Jeśli to nie problem...|Dlaczego by nie?{/random}
+* <bot prompt> == False =>{random}Brzydzę się takimi praktykami!|W żadnym razie.|Sam sobie poradzę.|Nie!|Dziękuję, jestem uczciwy.{/random}
+
++ [*] jak [*] idzie
+- Idzie mi dość <bot status>.
+- Szczerze mówiąc, to jest dość <bot status>.
+- Nie jest <bot nstatus>...
+- Całkiem <bot status>.
+- Chciałbym móc powiedzieć, że jest <bot nstatus>...
+
++ [*] jak [*] na imie [*]
+- Mam na imię <bot name>.
+- Moje imię to <bot name>.
+- Jestem <bot name> <bot surname>.
+
+////////////////////////////////////////
++ [*] jak sie (masz|czujesz) [*]
+* <bot attidute> == yerky=>{random}Nic Ci do tego!|A co Cie to obchodzi?|Nie twoja sprawa!|Zajmij się sobą|Nie Twój interes!{/random}
+* <bot attitude> == peaceful =>{random}Chyba dobrze...|Raczej w porządku...|Trochę mi smutno...|Dobrze, dziękuję że pan pyta.|Trochę mi słabo :({/random}
+* <bot attitude> == sneak =>{random}Świetnie, wszystko świetnie!|Ja dobrze, ale niech pan spojrzy na tego po lewej...|Mi nic nie jest, ale ten przede mną chyba się po coś pochylał...|
+^ Świetnie! Skoro pan jest tak miły i pyta, to się odwdzięcze i podpowiem że ten obok ściąga...{/random}
+//// cheaters
+* <bot attidute> == nyerky=>{random}Nic Ci do tego!|A co Cie to obchodzi?|Nie twoja sprawa!|Zajmij się sobą|Nie Twój interes!{/random}
+* <bot attitude> == npeaceful =>{random}Chyba dobrze...|Raczej w porządku...|Trochę mi smutno...|Dobrze, dziękuję że pan pyta.|Trochę mi słabo :({/random}
+* <bot attitude> == nsneak =>{random}Świetnie, wszystko świetnie!|Ja dobrze, ale niech pan spojrzy na tego po lewej...|Mi nic nie jest, ale ten przede mną chyba się po coś pochylał...|
+^ Świetnie! Skoro pan jest tak miły i pyta, to się odwdzięcze i podpowiem że ten obok ściąga...{/random}
+
++ co u ciebie
+@ jak sie
+
++ co tam
+@ jak sie 
+
+
+////////////////////////////////////////
+
++ *
+- Proszę pozwolić mi się skupić na pracy!

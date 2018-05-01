@@ -1,19 +1,9 @@
 class Field:
-    def __init__(self, x, y, params, width, height, walkable = True, poisonous = False):
+    def __init__(self, x, y, params, width, height,reachable, poisonous = False):
         self.x = x * width
         self.y = y * height
-        self.params = {
-            'picture': "path/to/file",
-            'is_beeping': "1",
-            'metal_detector_beeping': "weak",
-            'is_dugged_up': '1',
-            'war_here?': "trenches"
-        }
-        self.walkable = walkable
-        self.has_bomb = has_bomb
-
-        self.color = (0,0,0) if not walkable else (0,255,0)
-
+        self.reachable = reachable
+        self.poisonous = poisonous
         self.g_cost = 0
         self.h_cost = 0
 

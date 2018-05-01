@@ -1,9 +1,11 @@
-# University project for Communication Human - Computer course.
+# University project for Artificial Intelligence course.
 
-## Dependency setup
-pip install -r requirements.txt
+## Create docker image
+docker build -t ai .
 
-### Run
-./setup
-#### Screenshot
-![GUI](app_resources/images/readme.jpg?raw=true "Gui")
+## Run an app
+docker run -it \
+-v /tmp/.X11-unix:/tmp/.X11-unix \
+-v $(pwd)/test:/app \
+-e DISPLAY=$DISPLAY \
+-u developer ai

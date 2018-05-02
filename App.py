@@ -2,6 +2,7 @@
 import arcade
 
 from Grid import Grid
+from AstarSolver import AstarSolver
 
 class App(arcade.Window):
 
@@ -10,6 +11,9 @@ class App(arcade.Window):
         self.score = 0
         self.wilhelm = arcade.sound.load_sound("app_resources/sounds/wilhelm.ogg")
         self.grid = Grid();
+        self.grid_map = self.grid.map
+        self.aStar = AstarSolver(self.grid_map)
+        print(self.aStar.solve())
 
     def on_draw(self):
         arcade.start_render()

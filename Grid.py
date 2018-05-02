@@ -42,17 +42,11 @@ class Grid:
                 y =  self.field_height * row + self.field_height // 2
 
                 if(row % 2 and random.randint(0, 1) == 1):
-                    grid[row].append(Mushroom(x,y))
+                    grid[row].append(Mushroom(row,column,x,y))
                 else:
-                    grid[row].append(Field(x,y,"field",True))
+                    grid[row].append(Field(row,column,x,y,"field",True))
 
                 self.items.append(grid[row][column])
-
-        neighbours = self.get_neighbours(5,5)
-        for (x,y) in neighbours:
-            state = grid[x][y]
-            if state.reachable == False:
-                print(state.isEdible)
 
 
         return grid
@@ -76,20 +70,20 @@ class Grid:
     def getMushroomsList(self):
         return self.items
 
-    def get_neighbours(self,x,y):
-        # Size of "board"
-        X = 18
-        Y = 9
+    # def get_neighbours(self,x,y):
+    #     # Size of "board"
+    #     X = 18
+    #     Y = 9
 
-        neighbors = lambda x, y : [(x2, y2) for x2 in range(x-1, x+2)
-                                       for y2 in range(y-1, y+2)
-                                       if (-1 < x <= X and
-                                           -1 < y <= Y and
-                                           (x != x2 or y != y2) and
-                                           (0 <= x2 <= X) and
-                                           (0 <= y2 <= Y))]
+    #     neighbors = lambda x, y : [(x2, y2) for x2 in range(x-1, x+2)
+    #                                    for y2 in range(y-1, y+2)
+    #                                    if (-1 < x <= X and
+    #                                        -1 < y <= Y and
+    #                                        (x != x2 or y != y2) and
+    #                                        (0 <= x2 <= X) and
+    #                                        (0 <= y2 <= Y))]
 
-        return neighbors(x,y)
+    #     return neighbors(x,y)
 
     # def set_path(self, path):
     #     self.path = path

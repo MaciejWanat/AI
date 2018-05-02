@@ -48,8 +48,8 @@ class Grid:
 
                 self.items.append(grid[row][column])
 
-        neightbours = self.get_neighbours(5,5)
-        for (x,y) in neightbours:
+        neighbours = self.get_neighbours(5,5)
+        for (x,y) in neighbours:
             state = grid[x][y]
             if state.reachable == False:
                 print(state.isEdible)

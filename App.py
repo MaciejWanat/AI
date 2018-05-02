@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 import arcade
-import random
 
-from random import randint
 from Grid import Grid
 
 class App(arcade.Window):
 
     def __init__(self, width, height):
-
         super().__init__(width, height, title="Inteligentny Grzybiarz")
         self.score = 0
         self.wilhelm = arcade.sound.load_sound("app_resources/sounds/wilhelm.ogg")
@@ -16,7 +13,6 @@ class App(arcade.Window):
 
     def on_draw(self):
         arcade.start_render()
-
         self.grid.background_list.draw()
         self.grid.items.draw()
         self.grid.mushroomPicker.draw()
@@ -31,7 +27,7 @@ class App(arcade.Window):
 
 
 def main():
-    window = App(620,620)
+    window = App(1260,630)
     arcade.run()
 
 

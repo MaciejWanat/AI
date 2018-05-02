@@ -9,11 +9,12 @@ import random
 from random import randint
 
 class Grid:
-    def __init__(self, field_width=62, field_height=62,  width=11, height=11):
+    def __init__(self, field_width=70, field_height=70, width=18, height=9):
         self.grid = []
+        self.walls = [()]
+        self.path = []
         self.width = width
         self.height = height
-        self.path = []
         self.field_height = field_height
         self.field_width = field_width
         self.background_list = None
@@ -21,76 +22,47 @@ class Grid:
         self.SPRITE_SCALING = 1
         self.setup()
 
-
     def setup(self):
-        self.mushroomPicker = MushroomPicker(120,250,"app_resources/images/mushroompicker.png", self.SPRITE_SCALING)
+        self.mushroomPicker = MushroomPicker(35,35,"app_resources/images/mushroompicker.png", self.SPRITE_SCALING)
         self.background_list = arcade.SpriteList()
         self.items = arcade.SpriteList()
         self.drawBackground()
-        self.map = self.get_map()
+        self.map = self.create_map()
         self.grid = map
-        self.drawMap(map)
         self.physics_engine = Physics(self.mushroomPicker,self.items)
 
-    def get_map(self):
-        map_file = open("app_resources/maps/map" + str(randint(0,3)) + ".csv")
-        map_array = []
+    def create_map(self):
+        grid = []
 
-        for line in map_file:
-            line = line.strip()
-            map_row = line.split(",")
-            for index, item in enumerate(map_row):
-                map_row[index] = int(item)
-            map_array.append(map_row)
+        for row in range(self.height):
+            grid.append([])
+            for column in range(self.width):
 
-        return map_array
+                x =  self.field_width * column + self.field_width // 2
+                y =  self.field_height * row + self.field_height // 2
 
-    def drawMap(self,map):
+                if(row % 2 and random.randint(0, 1) == 1):
+                    grid[row].append(Mushroom(x,y))
+                else:
+                    grid[row].append(Field(x,y,"field",True))
 
-        position_x = 0;
-        position_y = 15;
-        mushroom_number = 0
+                self.items.append(grid[row][column])
+                print(grid[row][column].reachable)
 
-        for horizontal in self.map:
-            for vertical in horizontal:
-                if(vertical):
-                    mushroom = Mushroom(
-                        position_x,
-                        position_y + 32,
-                        "app_resources/images/tallShroom_" + random.choice(["brown","red","tan"])+".png",
-                         self.SPRITE_SCALING,
-                        "bot_" + str(mushroom_number)
-                    )
-                    mushroom.width = 70;
-                    mushroom.height = 70;
-                    id = Mushroom.id;
-                    mushroom.center_x = position_x
-                    mushroom.center_y = position_y + 32
-                    self.items.append(mushroom)
-
-                position_x += 62
-
-            position_y += 55
-            position_x = 0
-            mushroom_number += 1
+        return grid
 
     def drawBackground(self):
+        for row in range(self.height):
+            for column in range(self.width):
+                x =  self.field_width * column + self.field_width // 2
+                y =  self.field_height * row + self.field_height // 2
 
-        position_x = 0;
-        position_y = 0;
-
-        for x in range(self.width):
-            for y in range(self.height):
                 background_sprite = arcade.Sprite("app_resources/images/background.png", self.SPRITE_SCALING)
                 background_sprite.width = self.field_width;
                 background_sprite.height = self.field_height;
-                background_sprite.center_x = position_x
-                background_sprite.center_y = position_y
+                background_sprite.center_x = x
+                background_sprite.center_y = y
                 self.background_list.append(background_sprite)
-                position_x += self.field_height
-
-            position_y += self.field_width
-            position_x = 0
 
     def getBackgroundList(self):
         return self.background_list
@@ -98,30 +70,6 @@ class Grid:
     def getMushroomsList(self):
         return self.items
 
-        # for y in range(0, height):
-        #     horizontal = []
-        #     for x in range(0, width):
-        #         is_wall_field = self.get_is_wall_field(width, x, y)
-        #         is_bomb = self.is_bomb_field(not is_wall_field)
-        #         # field_params = self.generate_non_bomb_field_params(params_data)
-        #         field_params = self.generate_bomb_field_params(params_data) if is_bomb else self.generate_non_bomb_field_params(params_data)
-        #         field = Field(x, y, field_params, field_width, field_height, not is_wall_field, is_bomb)
-        #         horizontal.insert(len(horizontal), field)
-        #     self.grid.insert(len(self.grid), horizontal)
-
-
-    # def get_is_wall_field(self, width, x, y):
-    #     if (x == (width-1) and (y == (width-1))):
-    #         is_wall_field = False
-    #     else:
-    #         is_wall_field = random.randrange(12) == 1
-    #     return is_wall_field
-
-    # def is_bomb_field(self, is_walkable):
-    #     if is_walkable:
-    #         return random.randrange(30) == 1
-    #     else:
-    #         return False
 
     # def get_neighbours(self, field):
     #     neighbours = []

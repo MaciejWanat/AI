@@ -3,24 +3,21 @@ import re
 import ast
 import random
 
+from Field import Field
 from app_resources.assets import polishDel
 
-image_path = "app_resources/images/tallShroom_"
+image_path = "tallShroom_"
 
-class Mushroom(arcade.Sprite):
-    id = 0
 
-    def __init__(self,x,y,filename,sprite_scaling,bot_resources_variable):
-        self.config = self.loadConfig(bot_resources_variable)
+class Mushroom(Field):
+    def __init__(self, x, y, reachable=False):
+        self.config = self.loadConfig()
         self.isEdible = self.getEdiableFromConfig()
-        super().__init__( not self.isEdible and image_path + "red.png" or image_path + random.choice(["brown","tan"])+".png", sprite_scaling)
+        super().__init__(x, y,
+                         not self.isEdible and image_path + "red" or image_path + random.choice(["brown","tan"])
+                         ,reachable)
 
-        Mushroom.id = Mushroom.id + 1
-        self.center_x = x
-        self.center_y = y
-        self.id = Mushroom.id
-
-    def loadConfig(self,filename):
+    def loadConfig(self):
         config_file = random.choice(list(open("mushrooms_train/train.tsv",'r')))
         return config_file
 

@@ -1,13 +1,10 @@
 import arcade
-import re
-import ast
 import random
 
 from Field import Field
 from app_resources.assets import polishDel
 
 image_path = "tallShroom_"
-
 
 class Mushroom(Field):
     def __init__(self, x, y,center_x,center_y, reachable=False):

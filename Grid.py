@@ -1,22 +1,19 @@
 # coding: utf-8
+import random
 import arcade
+
 from Field import Field
 from Mushroom import Mushroom
 from MushroomPicker import MushroomPicker
-from Physics import Physics
-
-import random
 from random import randint
 
 class Grid:
-    def __init__(self, field_width=70, field_height=70, width=18, height=9):
+    def __init__(self, width, height, block_size):
         self.grid = []
-        self.walls = [()]
-        self.path = []
         self.width = width
         self.height = height
-        self.field_height = field_height
-        self.field_width = field_width
+        self.field_height = block_size
+        self.field_width = block_size
         self.background_list = None
         self.mushroomPicker = None
         self.SPRITE_SCALING = 1
@@ -29,7 +26,7 @@ class Grid:
         self.drawBackground()
         self.map = self.create_map()
         self.grid = map
-        self.physics_engine = Physics(self.mushroomPicker,self.items)
+
 
     def create_map(self):
         grid = []
@@ -69,24 +66,3 @@ class Grid:
 
     def getMushroomsList(self):
         return self.items
-
-    # def get_neighbours(self,x,y):
-    #     # Size of "board"
-    #     X = 18
-    #     Y = 9
-
-    #     neighbors = lambda x, y : [(x2, y2) for x2 in range(x-1, x+2)
-    #                                    for y2 in range(y-1, y+2)
-    #                                    if (-1 < x <= X and
-    #                                        -1 < y <= Y and
-    #                                        (x != x2 or y != y2) and
-    #                                        (0 <= x2 <= X) and
-    #                                        (0 <= y2 <= Y))]
-
-    #     return neighbors(x,y)
-
-    # def set_path(self, path):
-    #     self.path = path
-
-    # def first_and_last(self):
-    #     return [self.grid[0][0], self.grid[self.width-1][self.height-1]]

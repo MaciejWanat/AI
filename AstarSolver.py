@@ -2,17 +2,14 @@ import heapq
 
 class AstarSolver(object):
     def __init__(self,grid):
-        # open list
         self.opened = []
         heapq.heapify(self.opened)
-        # visited cells list
         self.closed = set()
-        # grid cells
         self.cells = grid
-        self.grid_height = 9
-        self.grid_width = 18
+        self.grid_height = len(grid)
+        self.grid_width = len(grid[0])
         self.start = self.cells[0][0]
-        self.end = self.cells[8][17]
+        self.end = self.cells[self.grid_height -1 ][self.grid_width -1 ]
 
     def get_heuristic(self, cell):
         """Compute the heuristic value H for a cell.
@@ -31,8 +28,8 @@ class AstarSolver(object):
 
     def get_adjacent_cells(self, x, y):
         """Returns adjacent cells to a cell.
-        Clockwise starting from the one on the right.
-        @param cell get adjacent cells for this cell
+        @param x, x position in grid
+        @param y, y position in grid
         @returns adjacent cells list.
         """
 
@@ -101,9 +98,9 @@ class AstarSolver(object):
                         # for this adj cell.
                         if adj_cell.g > cell.g + 10:
                             self.update_cell(adj_cell, cell)
-                            #print('Checked better path: ', adj_cell.x, adj_cell.y)
+                            print('Checked better path: ', adj_cell.x, adj_cell.y)
                     else:
                         self.update_cell(adj_cell, cell)
                         # add adj cell to open list
-                        #print('Heap push: ', adj_cell.x, adj_cell.y)
+                        print('Heap push: ', adj_cell.x, adj_cell.y)
                         heapq.heappush(self.opened, (adj_cell.f, adj_cell))

@@ -13,6 +13,7 @@ class App(arcade.Window):
         self.grid = Grid();
         self.grid_map = self.grid.map
         self.aStar = AstarSolver(self.grid_map)
+        self.path = self.aStar.solve()
         print(self.aStar.solve())
 
     def on_draw(self):
@@ -27,6 +28,21 @@ class App(arcade.Window):
         # Put the text on the screen.
         output = "Score: {}".format(self.score)
         arcade.draw_text(output, 10, 20, arcade.color.WHITE, 14)
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        """
+        Called when the user presses a mouse button.
+        """
+        if self.path:
+            y,x = self.path.pop(0)
+            print(x,y)
+
+
+            x =  (self.grid.field_width * x + self.grid.field_width // 2 )
+            y =  (self.grid.field_height * y + self.grid.field_height // 2)
+
+            self.grid.mushroomPicker.center_x = x
+            self.grid.mushroomPicker.center_y = y
 
 
 

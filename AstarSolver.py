@@ -9,7 +9,7 @@ class AstarSolver(object):
         self.grid_height = len(grid)
         self.grid_width = len(grid[0])
         self.start = self.cells[0][0]
-        self.end = self.cells[self.grid_height -1 ][self.grid_width -1 ]
+        self.end = self.cells[self.grid_height -1][self.grid_width -1]
 
     def get_heuristic(self, cell):
         """Compute the heuristic value H for a cell.
@@ -34,8 +34,8 @@ class AstarSolver(object):
         """
 
         # Size of "board"
-        X = 8
-        Y = 17
+        Y = self.grid_width - 1
+        X = self.grid_height - 1
 
         neighbors = lambda x, y : [(x2, y2) for x2 in range(x-1, x+2)
                                        for y2 in range(y-1, y+2)
@@ -73,7 +73,7 @@ class AstarSolver(object):
         #print('Updated coordinates: ', adj.x, adj.y)
 
     def solve(self):
-        """Solve maze, find path to ending cell.
+        """Solve maze, fiCCnd path to ending cell.
         @returns path or None if not found.
         """
         # add starting cell to open heap queue
@@ -102,5 +102,5 @@ class AstarSolver(object):
                     else:
                         self.update_cell(adj_cell, cell)
                         # add adj cell to open list
-                        print('Heap push: ', adj_cell.x, adj_cell.y)
+                        #print('Heap push: ', adj_cell.x, adj_cell.y)
                         heapq.heappush(self.opened, (adj_cell.f, adj_cell))

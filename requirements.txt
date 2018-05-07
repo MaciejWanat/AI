@@ -1,0 +1,6 @@
+arcade==0.9.9.post54
+Pillow==3.4.1
+ply==3.9
+pyglet==1.2.4
+rivescript==1.14.2
+six==1.10.0

@@ -1,4 +1,11 @@
 import heapq
+from enum import Enum
+
+class Direction(Enum):
+     NORTH = 1
+     EAST  = 2
+     WEST  = 3
+     SOUTH = 4
 
 class AstarSolver(object):
     def __init__(self,grid):
@@ -9,6 +16,7 @@ class AstarSolver(object):
         self.grid_height = len(grid)
         self.grid_width = len(grid[0])
         self.start = self.cells[0][0]
+        self.direction = Direction.EAST
         self.end = self.cells[self.grid_height -1][self.grid_width -1]
 
     def get_heuristic(self, cell):
@@ -36,6 +44,10 @@ class AstarSolver(object):
         # Size of "board"
         Y = self.grid_width - 1
         X = self.grid_height - 1
+        skewNeighbors = [(x - 1, y - 1),(x + 1, y - 1),
+                         (x - 1, y + 1), (x + 1, y + 1)]
+
+
 
         neighbors = lambda x, y : [(x2, y2) for x2 in range(x-1, x+2)
                                        for y2 in range(y-1, y+2)
@@ -45,7 +57,8 @@ class AstarSolver(object):
                                            (0 <= x2 <= X) and
                                            (0 <= y2 <= Y))]
 
-        return [self.cells[x][y] for (x,y) in neighbors(x,y)]
+        toCheck = list(set(neighbors(x,y)) - set(skewNeighbors))
+        return [self.cells[x][y] for (x,y) in toCheck]
 
     def get_path(self):
         cell = self.end
@@ -60,6 +73,36 @@ class AstarSolver(object):
         path.append((self.start.x, self.start.y))
         path.reverse()
         return path
+
+    def get_path_states(self,path,start_dir):
+
+        states = []
+        direction = Direction.EAST
+
+        for i in range(len(path)-1):
+            new_direction = self.computeState(path[i][0],path[i][1],path[i+1][0],path[i+1][1])
+
+            if(direction == new_direction):
+                states.append("Move")
+            else:
+                states.append("Rotate to -> " + str(new_direction))
+                direction = new_direction
+
+        return states
+
+    def computeState(self,Y,X,y,x):
+        dir_x = x - X
+        dir_y = y-Y
+
+
+        if(dir_x == 1):
+            return Direction.EAST
+        if(dir_y == 1):
+            return Direction.NORTH
+        if(dir_x == -1):
+            return Direction.WEST
+
+        return Direction.SOUTH
 
     def update_cell(self, adj, cell):
         """Update adjacent cell.
@@ -98,7 +141,7 @@ class AstarSolver(object):
                         # for this adj cell.
                         if adj_cell.g > cell.g + 10:
                             self.update_cell(adj_cell, cell)
-                            print('Checked better path: ', adj_cell.x, adj_cell.y)
+                            #print('Checked better path: ', adj_cell.x, adj_cell.y)
                     else:
                         self.update_cell(adj_cell, cell)
                         # add adj cell to open list

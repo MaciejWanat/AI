@@ -16,11 +16,12 @@ class App(arcade.Window):
         self.grid_width = int(width / self.block_size )
         self.grid_height = int(height / self.block_size )
         self.score = 0
-        #self.wilhelm = arcade.sound.load_sound("app_resources/sounds/wilhelm.ogg")
         self.grid = Grid(self.grid_width,self.grid_height,self.block_size)
         self.grid_map = self.grid.map
         self.aStar = AstarSolver(self.grid_map)
-        self.path = self.aStar.solve()[1:] #remove initial position
+        self.path = self.aStar.solve()
+        print(self.path)
+        print(self.aStar.get_path_states(self.path,1))
 
     def on_draw(self):
         """

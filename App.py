@@ -3,6 +3,7 @@ import arcade
 
 from Grid import Grid
 from AstarSolver import AstarSolver
+from Network import Network
 
 class App(arcade.Window):
     def __init__(self, width, height,block_size):
@@ -20,8 +21,9 @@ class App(arcade.Window):
         self.grid_map = self.grid.map
         self.aStar = AstarSolver(self.grid_map)
         self.path = self.aStar.solve()
-        print(self.path)
-        print(self.aStar.get_path_states(self.path,1))
+        self.gatherMushroomAlg = Network()
+        # print(self.path)
+        # print(self.aStar.get_path_states(self.path,1))
 
     def on_draw(self):
         """
@@ -31,6 +33,7 @@ class App(arcade.Window):
         self.grid.background_list.draw()
         self.grid.items.draw()
         self.grid.mushroomPicker.draw()
+
 
         # Put the text on the screen.
         output = "Score: {}".format(self.score)
@@ -44,14 +47,35 @@ class App(arcade.Window):
         if self.path:
             y,x = self.path.pop(0)
 
-            x =  (self.grid.field_width * x + self.grid.field_width // 2 )
-            y =  (self.grid.field_height * y + self.grid.field_height // 2)
+            x1 =  (self.grid.field_width * x + self.grid.field_width // 2 )
+            y1 =  (self.grid.field_height * y + self.grid.field_height // 2)
 
-            self.grid.mushroomPicker.center_x = x
-            self.grid.mushroomPicker.center_y = y
+            self.grid.mushroomPicker.center_x = x1
+            self.grid.mushroomPicker.center_y = y1
+            self.grid.mushroomPicker.x = x
+            self.grid.mushroomPicker.y = y
+            self.gatherMushrooms((self.grid.mushroomPicker.x,self.grid.mushroomPicker.y))
+
+    def gatherMushrooms(self,mushroomPickerPosition):
+
+        nearestArea = self.aStar.get_adjacent_cells(mushroomPickerPosition[1],mushroomPickerPosition[0])
+
+        for field in nearestArea:
+
+            if(field.reachable == False):
+                edible = self.gatherMushroomAlg.isEdible(field.vector)
+                print()
+                if(not edible):
+                    field.center_y = -100
+                    field.center_x = -100
+                print("The mushroom on posisition -> ",field.x,field.y, " is ", edible)
+
+
 
 def main():
     window = App(1260,630,70)
+
     arcade.run()
+
 
 main()

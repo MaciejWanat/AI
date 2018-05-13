@@ -86,6 +86,7 @@ class AstarSolver(object):
                 states.append("Move")
             else:
                 states.append("Rotate to -> " + str(new_direction))
+                states.append("Move")
                 direction = new_direction
 
         return states

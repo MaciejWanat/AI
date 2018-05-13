@@ -1,4 +1,11 @@
 import heapq
+from enum import Enum
+
+class Direction(Enum):
+     NORTH = 1
+     EAST  = 2
+     WEST  = 3
+     SOUTH = 4
 
 class AstarSolver(object):
     def __init__(self,grid):
@@ -9,6 +16,7 @@ class AstarSolver(object):
         self.grid_height = len(grid)
         self.grid_width = len(grid[0])
         self.start = self.cells[0][0]
+        self.direction = Direction.EAST
         self.end = self.cells[self.grid_height -1][self.grid_width -1]
 
     def get_heuristic(self, cell):
@@ -36,6 +44,13 @@ class AstarSolver(object):
         # Size of "board"
         Y = self.grid_width - 1
         X = self.grid_height - 1
+        xPos = x
+        yPos = y
+        skewNeighbors = [(x - 1, y - 1),(x + 1, y - 1),
+                         (x - 1, y + 1), (x + 1, y + 1)]
+
+        # #skewNeighborsToDelete = list(map(lambda: x,y,skewNeighbors))
+        # print(skewNeighbors,x,y)
 
         neighbors = lambda x, y : [(x2, y2) for x2 in range(x-1, x+2)
                                        for y2 in range(y-1, y+2)
@@ -44,16 +59,29 @@ class AstarSolver(object):
                                            (x != x2 or y != y2) and
                                            (0 <= x2 <= X) and
                                            (0 <= y2 <= Y))]
+        toCheck = list(set(neighbors(x,y)) - set(skewNeighbors))
+        states = [((x,y),self.computeState(xPos,yPos,x,y)) for (x,y) in toCheck]
 
-        return [self.cells[x][y] for (x,y) in neighbors(x,y)]
+        return [(self.cells[x][y],state) for ((x,y),state) in states]
+
+    def computeState(self,X,Y,x,y):
+        if(x > X and Y==y):
+            return "rotate east"
+        if(x == X and y > Y):
+            return "rotate north"
+        if(x < X and y > Y):
+            return "rotate west"
+
+        return "rotate south"
 
     def get_path(self):
         cell = self.end
-        path = [(cell.x, cell.y)]
+        path = [((cell.x, cell.y), "NULL")]
+
         if cell.parent is not None:
             while cell.parent is not self.start:
                 cell = cell.parent
-                path.append((cell.x, cell.y))
+                path.append(((cell.x, cell.y),cell.parent.01state))
         else:
             return path
 
@@ -61,7 +89,7 @@ class AstarSolver(object):
         path.reverse()
         return path
 
-    def update_cell(self, adj, cell):
+    def update_cell(self, adj, cell,state):
         """Update adjacent cell.
         @param adj adjacent cell to current cell
         @param cell current cell being processed
@@ -69,11 +97,12 @@ class AstarSolver(object):
         adj.g = cell.g + 10
         adj.h = self.get_heuristic(adj)
         adj.parent = cell
+        adj.parent.state = state
         adj.f = adj.h + adj.g
         #print('Updated coordinates: ', adj.x, adj.y)
 
     def solve(self):
-        """Solve maze, fiCCnd path to ending cell.
+        """Solve maze, find path to ending cell.
         @returns path or None if not found.
         """
         # add starting cell to open heap queue
@@ -82,25 +111,30 @@ class AstarSolver(object):
 
             # pop cell from heap queue
             f, cell = heapq.heappop(self.opened)
+
             # add cell to closed list so we don't process it twice
             self.closed.add(cell)
+
             # if ending cell, return found path
+
             if cell is self.end:
                 return self.get_path()
+
             # get adjacent cells for cell
             adj_cells = self.get_adjacent_cells(cell.x,cell.y)
 
-            for adj_cell in adj_cells:
+            for (adj_cell,state) in adj_cells:
+                #print(adj_cell.x,adj_cell.y,state)
                 if adj_cell.reachable and adj_cell not in self.closed:
                     if (adj_cell.f, adj_cell) in self.opened:
                         # if adj cell in open list, check if current path is
                         # better than the one previously found
                         # for this adj cell.
                         if adj_cell.g > cell.g + 10:
-                            self.update_cell(adj_cell, cell)
+                            self.update_cell(adj_cell, cell, state)
                             print('Checked better path: ', adj_cell.x, adj_cell.y)
                     else:
-                        self.update_cell(adj_cell, cell)
+                        self.update_cell(adj_cell, cell,state)
                         # add adj cell to open list
                         #print('Heap push: ', adj_cell.x, adj_cell.y)
                         heapq.heappush(self.opened, (adj_cell.f, adj_cell))

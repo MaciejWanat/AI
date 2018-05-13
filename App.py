@@ -21,6 +21,7 @@ class App(arcade.Window):
         self.grid_map = self.grid.map
         self.aStar = AstarSolver(self.grid_map)
         self.path = self.aStar.solve()[1:] #remove initial position
+        print(self.path)
 
     def on_draw(self):
         """
@@ -41,7 +42,7 @@ class App(arcade.Window):
         Visualization of movement on a board
         """
         if self.path:
-            y,x = self.path.pop(0)
+            y,x = self.path.pop(0)[0]
 
             x =  (self.grid.field_width * x + self.grid.field_width // 2 )
             y =  (self.grid.field_height * y + self.grid.field_height // 2)

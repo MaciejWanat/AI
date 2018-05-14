@@ -8,7 +8,7 @@ from MushroomPicker import MushroomPicker
 from random import randint
 
 class Grid:
-    def __init__(self, width, height, block_size):
+    def __init__(self, width, height, block_size,start_x,start_y):
         self.grid = []
         self.width = width
         self.height = height
@@ -16,11 +16,16 @@ class Grid:
         self.field_width = block_size
         self.background_list = None
         self.mushroomPicker = None
+        self.mushroomPicker_start_x = start_x
+        self.mushroomPicker_start_y = start_y
         self.SPRITE_SCALING = 1
         self.setup()
 
     def setup(self):
-        self.mushroomPicker = MushroomPicker(0,0,35,35,"app_resources/images/mushroompicker.png", self.SPRITE_SCALING)
+        x =  (self.field_width * self.mushroomPicker_start_x + self.field_width // 2 )
+        y =  (self.field_height * self.mushroomPicker_start_y + self.field_height // 2)
+
+        self.mushroomPicker = MushroomPicker(self.mushroomPicker_start_x,self.mushroomPicker_start_y,x,y,"app_resources/images/mushroompicker.png", self.SPRITE_SCALING)
         self.background_list = arcade.SpriteList()
         self.items = arcade.SpriteList()
         self.drawBackground()

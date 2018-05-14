@@ -7,7 +7,7 @@ from Network import Network
 from Direction import Direction
 
 class App(arcade.Window):
-    def __init__(self, width, height,block_size):
+    def __init__(self, width, height,block_size,start_x,start_y):
         """Create whole app.
         @param width -> width of the app window in px
         @param height -> height of the app window in px
@@ -18,9 +18,11 @@ class App(arcade.Window):
         self.grid_width = int(width / self.block_size )
         self.grid_height = int(height / self.block_size )
         self.score = 0
-        self.grid = Grid(self.grid_width,self.grid_height,self.block_size)
+        self.start_x = start_x
+        self.start_y = start_y
+        self.grid = Grid(self.grid_width,self.grid_height,self.block_size,self.start_x,self.start_y)
         self.grid_map = self.grid.map
-        self.aStar = AstarSolver(self.grid_map)
+        self.aStar = AstarSolver(self.grid_map,self.start_x,self.start_y)
         self.path = self.aStar.solve()
         self.gatherMushroomAlg = Network()
         print(self.aStar.get_path_states(self.path))
@@ -76,7 +78,7 @@ class App(arcade.Window):
                     self.grid.mushroomPicker.angle = -180
 
                 if(step == Direction.SOUTH):
-                  self.grid.mushroomPicker.angle = -270
+                  self.grid.mushroomPicker.angle = -90
 
             x1 =  (self.grid.field_width * self.grid.mushroomPicker.x + self.grid.field_width // 2 )
             y1 =  (self.grid.field_height * self.grid.mushroomPicker.y + self.grid.field_height // 2)
@@ -97,12 +99,10 @@ class App(arcade.Window):
                     field.center_y = -100
                     field.center_x = -100
                     self.score +=1
-                print("The mushroom on posisition -> ",field.x,field.y, " is ", edible)
-
-
+                print("The mushroom on posisition -> ",field.x,field.y, " is ",  "poisonous" if edible else "edible")
 
 def main():
-    window = App(1260,630,70)
+    window = App(1260,630,70,0,0)
 
     arcade.run()
 

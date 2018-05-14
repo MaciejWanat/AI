@@ -1,5 +1,5 @@
-numpy==1.14.2
-Keras==2.1.6
 arcade==0.9.9.post54
+Keras==2.1.6
+numpy==1.14.2
 pandas==0.22.0
 scikit_learn==0.19.1

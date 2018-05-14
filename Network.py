@@ -17,10 +17,9 @@ class Network:
 
     def predict(self,test):
         prob = float(self.model.predict(test))
-        if prob >= 0.5:
-            return 1
-        else:
-            return 0
+        print("Probability: ",prob)
+
+        return 1 if prob >= 0.5 else 0
 
     def isEdible(self,test):
         return self.predict(test)

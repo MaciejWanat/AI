@@ -2,16 +2,16 @@ import heapq
 from Direction import Direction
 
 class AstarSolver(object):
-    def __init__(self,grid):
+    def __init__(self,grid,start_x,start_y):
         self.opened = []
         heapq.heapify(self.opened)
         self.closed = set()
         self.cells = grid
         self.grid_height = len(grid)
         self.grid_width = len(grid[0])
-        self.start = self.cells[0][0]
+        self.start = self.cells[start_y][start_x]
         self.direction = Direction.EAST
-        self.end = self.cells[self.grid_height -1][self.grid_width -1]
+        self.end = self.cells[self.grid_height - 1][self.grid_width -1]
 
     def get_heuristic(self, cell):
         """Compute the heuristic value H for a cell.

@@ -4,6 +4,7 @@ import arcade
 from Grid import Grid
 from AstarSolver import AstarSolver
 from Network import Network
+from Direction import Direction
 
 class App(arcade.Window):
     def __init__(self, width, height,block_size):
@@ -22,8 +23,8 @@ class App(arcade.Window):
         self.aStar = AstarSolver(self.grid_map)
         self.path = self.aStar.solve()
         self.gatherMushroomAlg = Network()
-        # print(self.path)
-        # print(self.aStar.get_path_states(self.path,1))
+        print(self.aStar.get_path_states(self.path))
+        self.actionsPath = self.aStar.get_path_states(self.path)
 
     def on_draw(self):
         """
@@ -44,16 +45,44 @@ class App(arcade.Window):
         Called when the user presses a mouse button.
         Visualization of movement on a board
         """
-        if self.path:
-            y,x = self.path.pop(0)
+        if self.actionsPath:
+            direction = self.aStar.direction
 
-            x1 =  (self.grid.field_width * x + self.grid.field_width // 2 )
-            y1 =  (self.grid.field_height * y + self.grid.field_height // 2)
+            (action,step) = self.actionsPath.pop(0)
+
+            if(action == 'Move'):
+                if(direction == Direction.EAST):
+                    self.grid.mushroomPicker.x += 1
+
+                if(direction == Direction.NORTH):
+                    self.grid.mushroomPicker.y += 1
+
+                if(direction == Direction.WEST):
+                    self.grid.mushroomPicker.x -= 1
+
+                if(direction == Direction.SOUTH):
+                    self.grid.mushroomPicker.y -= 1
+
+            elif(action == 'Rotate'):
+                self.aStar.direction = step
+
+                if(step == Direction.NORTH):
+                    self.grid.mushroomPicker.angle = 90
+
+                if(step == Direction.EAST):
+                    self.grid.mushroomPicker.angle = 0
+
+                if(step == Direction.WEST):
+                    self.grid.mushroomPicker.angle = -180
+
+                if(step == Direction.SOUTH):
+                  self.grid.mushroomPicker.angle = -270
+
+            x1 =  (self.grid.field_width * self.grid.mushroomPicker.x + self.grid.field_width // 2 )
+            y1 =  (self.grid.field_height * self.grid.mushroomPicker.y + self.grid.field_height // 2)
 
             self.grid.mushroomPicker.center_x = x1
             self.grid.mushroomPicker.center_y = y1
-            self.grid.mushroomPicker.x = x
-            self.grid.mushroomPicker.y = y
             self.gatherMushrooms((self.grid.mushroomPicker.x,self.grid.mushroomPicker.y))
 
     def gatherMushrooms(self,mushroomPickerPosition):
@@ -64,10 +93,10 @@ class App(arcade.Window):
 
             if(field.reachable == False):
                 edible = self.gatherMushroomAlg.isEdible(field.vector)
-                print()
                 if(not edible):
                     field.center_y = -100
                     field.center_x = -100
+                    self.score +=1
                 print("The mushroom on posisition -> ",field.x,field.y, " is ", edible)
 
 

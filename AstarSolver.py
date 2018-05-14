@@ -1,11 +1,5 @@
 import heapq
-from enum import Enum
-
-class Direction(Enum):
-     NORTH = 1
-     EAST  = 2
-     WEST  = 3
-     SOUTH = 4
+from Direction import Direction
 
 class AstarSolver(object):
     def __init__(self,grid):
@@ -24,7 +18,7 @@ class AstarSolver(object):
         Distance between this cell and the ending cell multiply by 10.
         @returns heuristic value H
         """
-        return 10 *(abs(cell.x - self.end.x) + abs(cell.y - self.end.y))
+        return (abs(cell.x - self.end.x) + abs(cell.y - self.end.y))
 
     def get_cell(self, x, y):
         """Returns a cell from the cells list.
@@ -44,9 +38,9 @@ class AstarSolver(object):
         # Size of "board"
         Y = self.grid_width - 1
         X = self.grid_height - 1
+
         skewNeighbors = [(x - 1, y - 1),(x + 1, y - 1),
                          (x - 1, y + 1), (x + 1, y + 1)]
-
 
 
         neighbors = lambda x, y : [(x2, y2) for x2 in range(x-1, x+2)
@@ -58,6 +52,7 @@ class AstarSolver(object):
                                            (0 <= y2 <= Y))]
 
         toCheck = list(set(neighbors(x,y)) - set(skewNeighbors))
+
         return [self.cells[x][y] for (x,y) in toCheck]
 
     def get_path(self):
@@ -74,19 +69,18 @@ class AstarSolver(object):
         path.reverse()
         return path
 
-    def get_path_states(self,path,start_dir):
-
+    def get_path_states(self,path):
         states = []
-        direction = Direction.EAST
+        direction = self.direction
 
         for i in range(len(path)-1):
             new_direction = self.computeState(path[i][0],path[i][1],path[i+1][0],path[i+1][1])
 
             if(direction == new_direction):
-                states.append("Move")
+                states.append(("Move",0))
             else:
-                states.append("Rotate to -> " + str(new_direction))
-                states.append("Move")
+                states.append(("Rotate",new_direction))
+                states.append(("Move",0))
                 direction = new_direction
 
         return states

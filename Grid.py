@@ -20,7 +20,7 @@ class Grid:
         self.setup()
 
     def setup(self):
-        self.mushroomPicker = MushroomPicker(35,35,"app_resources/images/mushroompicker.png", self.SPRITE_SCALING)
+        self.mushroomPicker = MushroomPicker(0,0,35,35,"app_resources/images/mushroompicker.png", self.SPRITE_SCALING)
         self.background_list = arcade.SpriteList()
         self.items = arcade.SpriteList()
         self.drawBackground()

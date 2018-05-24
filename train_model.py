@@ -32,9 +32,10 @@ model.add(Dense(1, activation='sigmoid'))
 
 #compile the network
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+#adam optimizer for gradient
 
 #fit the network
-history = model.fit(X, Y, epochs=20, batch_size=10)
+history = model.fit(X, Y, epochs=20, batch_size=32)
 
 #evaluate the network
 loss, accuracy = model.evaluate(X, Y)

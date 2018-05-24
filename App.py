@@ -48,6 +48,7 @@ class App(arcade.Window):
         Visualization of movement on a board
         """
         if self.actionsPath:
+            self.gatherMushrooms((self.grid.mushroomPicker.x,self.grid.mushroomPicker.y))
             direction = self.aStar.direction
 
             (action,step) = self.actionsPath.pop(0)
@@ -85,20 +86,20 @@ class App(arcade.Window):
 
             self.grid.mushroomPicker.center_x = x1
             self.grid.mushroomPicker.center_y = y1
-            self.gatherMushrooms((self.grid.mushroomPicker.x,self.grid.mushroomPicker.y))
+
 
     def gatherMushrooms(self,mushroomPickerPosition):
-
         nearestArea = self.aStar.get_adjacent_cells(mushroomPickerPosition[1],mushroomPickerPosition[0])
 
         for field in nearestArea:
-
             if(field.reachable == False):
                 edible = self.gatherMushroomAlg.isEdible(field.vector)
+
                 if(not edible):
                     field.center_y = -100
                     field.center_x = -100
                     self.score +=1
+
                 print("The mushroom on posisition -> ",field.x,field.y, " is ",  "poisonous" if edible else "edible")
 
 def main():

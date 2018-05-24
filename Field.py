@@ -14,7 +14,7 @@ class Field(arcade.Sprite):
         self.g_cost = 0
         self.h_cost = 0
         self.g = 0
-        self.h = 0
+        self.h = 10
         self.f = 0
 
     def __lt__(self, other):

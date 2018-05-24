@@ -13,7 +13,7 @@ class Network:
         self.model.load_weights(modelWeightsName)
 
     def compileModel(self):
-        self.model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+        self.model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     def predict(self,test):
         prob = float(self.model.predict(test))

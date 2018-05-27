@@ -3,6 +3,7 @@
 #-----------------------------------
 
 # organize imports
+import glob
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import MinMaxScaler
 import numpy as np
@@ -10,6 +11,19 @@ import mahotas
 import cv2
 import os
 import h5py
+from matplotlib import pyplot
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import KFold, StratifiedKFold
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
+from sklearn.externals import joblib
+import pickle
 
 # fixed-sizes for image
 fixed_size = tuple((500, 500))
@@ -70,7 +84,7 @@ i, j = 0, 0
 k = 0
 
 # num of images per class
-images_per_class = 80
+images_per_class = 73
 
 # loop over the training data sub-folders
 for training_name in train_labels:
@@ -146,25 +160,6 @@ h5f_label.close()
 
 print ("[STATUS] end of training..")
 
-# import the necessary packages
-import h5py
-import numpy as np
-import os
-import glob
-import cv2
-from matplotlib import pyplot
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.model_selection import KFold, StratifiedKFold
-from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
-from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from sklearn.naive_bayes import GaussianNB
-from sklearn.svm import SVC
-from sklearn.externals import joblib
-
 # create all the machine learning models
 models = []
 models.append(('LR', LogisticRegression(random_state=9)))
@@ -234,14 +229,18 @@ pyplot.show()
 
 import matplotlib.pyplot as plt
 
+# path to test data
+test_path = "dataset/test"
+
 # create the model - Random Forests
 clf  = RandomForestClassifier(n_estimators=100, random_state=9)
 
 # fit the training data to the model
-clf.fit(trainDataGlobal, trainLabelsGlobal)
+clf.fit(global_features, global_labels)
 
-# path to test data
-test_path = "dataset/test"
+# save model
+with open('../model/flowerModelRF.model', 'wb') as model:
+    pickle.dump(clf, model)
 
 # loop through the test images
 for file in glob.glob(test_path + "/*.jpg"):

@@ -105,7 +105,7 @@ class App(arcade.Window):
                         field.center_x = -100
                         self.score +=1
 
-                    print("The mushroom on posisition -> ",field.x,field.y, " is ",  "poisonous" if edible else "edible")
+                    print("The mushroom on position -> ",field.x,field.y, " is ",  "poisonous" if edible else "edible")
                     
                     field.reachable = True           
                 elif type(field) is Flower:     # is a flower                
@@ -118,7 +118,7 @@ class App(arcade.Window):
                         self.score +=1
 
                     print("------------------") 
-                    print("The flower on posisition -> ",field.x,field.y, " is ",  "protected" if protected else "not protected")
+                    print("The flower on position -> ",field.x,field.y, " is ",  "protected" if protected else "not protected")
                     print("I think it's a " + predName + "!")   
                     print("In fact, it was a " + str(field.flowerName).title() + " (picture " + str(field.picNum) + ").")
 

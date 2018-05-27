@@ -21,7 +21,6 @@ class Flower(Field):
         labels = labelsFile.read().split("\t")
 
         self.picNum = randint(1, 21)
-        print('Num ', self.picNum)
         self.flowerName = labels[self.picNum - 1]
         if (self.flowerName == 'snowdrop'):
             self.isProtected = 1

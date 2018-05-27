@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import arcade
 
+from FlowerPower import FlowerPower
 from Grid import Grid
 from AstarSolver import AstarSolver
 from Network import Network
@@ -25,6 +26,7 @@ class App(arcade.Window):
         self.aStar = AstarSolver(self.grid_map,self.start_x,self.start_y)
         self.path = self.aStar.solve()
         self.gatherMushroomAlg = Network()
+        self.gatherFlowerAlg = FlowerPower()
         print(self.aStar.get_path_states(self.path))
         self.actionsPath = self.aStar.get_path_states(self.path)
 
@@ -93,14 +95,26 @@ class App(arcade.Window):
 
         for field in nearestArea:
             if(field.reachable == False):
-                edible = self.gatherMushroomAlg.isEdible(field.vector)
+                if hasattr(field, 'vector'):    
+                    edible = self.gatherMushroomAlg.isEdible(field.vector)
 
-                if(not edible):
-                    field.center_y = -100
-                    field.center_x = -100
-                    self.score +=1
+                    if(not edible):
+                        field.center_y = -100
+                        field.center_x = -100
+                        self.score +=1
 
-                print("The mushroom on posisition -> ",field.x,field.y, " is ",  "poisonous" if edible else "edible")
+                    print("\nThe mushroom on posisition -> ",field.x,field.y, " is ",  "poisonous" if edible else "edible")
+                elif hasattr(field, 'picNum'):
+                    protected = self.gatherFlowerAlg.isProtected(field)
+
+                    if(not protected):
+                        field.center_y = -100
+                        field.center_x = -100
+                        self.score +=1
+
+                    print("\nThe flower on posisition -> ",field.x,field.y, " is ",  "protected" if protected else "not protected")
+                    print("I think it's a " + self.gatherFlowerAlg.getName(field) + "!")   
+                    print("In fact, it was a " + str(field.flowerName) + " (picture " + str(field.picNum) + ").")
 
 def main():
     window = App(1260,630,70,0,0)

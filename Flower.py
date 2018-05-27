@@ -17,7 +17,7 @@ class Flower(Field):
         self.h = 10000
 
     def loadConfig(self):
-        labelsFile = open('./flowerData/test/labels.tsv')
+        labelsFile = open('./flowerTest/labels.tsv')
         labels = labelsFile.read().split("\t")
 
         self.picNum = randint(1, 21)

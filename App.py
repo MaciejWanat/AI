@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import arcade
 
+from Mushroom import Mushroom
+from Flower import Flower
 from FlowerPower import FlowerPower
 from Grid import Grid
 from AstarSolver import AstarSolver
@@ -95,7 +97,7 @@ class App(arcade.Window):
 
         for field in nearestArea:
             if(field.reachable == False):
-                if hasattr(field, 'vector'):    
+                if type(field) is Mushroom:    # is a mushroom 
                     edible = self.gatherMushroomAlg.isEdible(field.vector)
 
                     if(not edible):
@@ -103,19 +105,29 @@ class App(arcade.Window):
                         field.center_x = -100
                         self.score +=1
 
-                    print("\nThe mushroom on posisition -> ",field.x,field.y, " is ",  "poisonous" if edible else "edible")
-                elif hasattr(field, 'picNum'):
+                    print("The mushroom on posisition -> ",field.x,field.y, " is ",  "poisonous" if edible else "edible")
+                    
+                    field.reachable = True           
+                elif type(field) is Flower:     # is a flower                
                     protected = self.gatherFlowerAlg.isProtected(field)
+                    predName = self.gatherFlowerAlg.getName(field)
 
                     if(not protected):
                         field.center_y = -100
                         field.center_x = -100
                         self.score +=1
 
-                    print("\nThe flower on posisition -> ",field.x,field.y, " is ",  "protected" if protected else "not protected")
-                    print("I think it's a " + self.gatherFlowerAlg.getName(field) + "!")   
-                    print("In fact, it was a " + str(field.flowerName) + " (picture " + str(field.picNum) + ").")
+                    print("------------------") 
+                    print("The flower on posisition -> ",field.x,field.y, " is ",  "protected" if protected else "not protected")
+                    print("I think it's a " + predName + "!")   
+                    print("In fact, it was a " + str(field.flowerName).title() + " (picture " + str(field.picNum) + ").")
 
+                    if(str(field.flowerName).title() != str(predName)):
+                        print("Looks like I was wrong :(")
+                        self.score -=2
+
+                    field.reachable = True
+                
 def main():
     window = App(1260,630,70,0,0)
 

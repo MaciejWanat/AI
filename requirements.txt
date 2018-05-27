@@ -1,5 +1,9 @@
-arcade==0.9.9.post54
-Keras==2.1.6
-numpy==1.14.2
 pandas==0.22.0
+opencv_python==3.4.1.15
+mahotas==1.4.4
+h5py==2.7.1
+matplotlib==2.2.2
+numpy==1.14.2
+Keras==2.1.6
+arcade==0.9.9.post54
 scikit_learn==0.19.1

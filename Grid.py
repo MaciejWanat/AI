@@ -45,7 +45,11 @@ class Grid:
                 y =  self.field_height * row + self.field_height // 2
 
                 if(row % 2 and random.randint(0, 1) == 1):
-                    grid[row].append(Flower(row,column,x,y))
+                    mushOrFlower = randint(0, 1)
+                    if(mushOrFlower == 0):
+                        grid[row].append(Flower(row,column,x,y))
+                    else:
+                        grid[row].append(Mushroom(row,column,x,y)) 
                 else:
                     grid[row].append(Field(row,column,x,y,"field",True))
 

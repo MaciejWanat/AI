@@ -4,6 +4,7 @@ import arcade
 
 from Field import Field
 from Mushroom import Mushroom
+from Flower import Flower
 from MushroomPicker import MushroomPicker
 from random import randint
 
@@ -44,7 +45,7 @@ class Grid:
                 y =  self.field_height * row + self.field_height // 2
 
                 if(row % 2 and random.randint(0, 1) == 1):
-                    grid[row].append(Mushroom(row,column,x,y))
+                    grid[row].append(Flower(row,column,x,y))
                 else:
                     grid[row].append(Field(row,column,x,y,"field",True))
 

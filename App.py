@@ -116,6 +116,7 @@ class App(arcade.Window):
 
 
                 elif type(field) is Flower:
+
                     protected = self.gatherFlowerAlg.isProtected(field)
                     predName = self.gatherFlowerAlg.getName(field)
 
@@ -124,9 +125,11 @@ class App(arcade.Window):
                         field.center_x = -100
                         self.score +=1
 
+
                     print("------------------")
                     print("The flower on position -> ",field.x,field.y, " is ",  "protected" if protected else "not protected")
                     print("I think it's a " + predName + "!")
+
                     print("In fact, it was a " + str(field.flowerName).title() + " (picture " + str(field.picNum) + ").")
 
                     if(str(field.flowerName).title() != str(predName)):

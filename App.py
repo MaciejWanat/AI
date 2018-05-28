@@ -114,6 +114,7 @@ class App(arcade.Window):
                         print("I was wrong! What's a pity! You will die in a few minutes!")
                         self.score -=2
 
+                    field.reachable = True
 
                 elif type(field) is Flower:
 

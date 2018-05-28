@@ -34,16 +34,16 @@ def fd_histogram(image, mask=None):
     # normalize the histogram
     cv2.normalize(hist, hist)
     # return the histogram
-    return hist.flatten() 
+    return hist.flatten()
 
 class FlowerPower:
     def __init__(self):
-        modelFile = open('./model/flowerModelRF.model', 'rb')
+        modelFile = open('./flowers_recoginition/model/flowerModelRF.model', 'rb')
         self.clf = pickle.load(modelFile)
         modelFile.close()
-    
+
     def predict(self, test):
-        imageFile = './flowerTest/image_' + str(test.picNum) + '.jpg'
+        imageFile = './flowers_recoginition/flowerTest/image_' + str(test.picNum) + '.jpg'
 
         fixed_size = tuple((500, 500))
 
@@ -78,4 +78,3 @@ class FlowerPower:
             return 1
         else:
             return 0
-          

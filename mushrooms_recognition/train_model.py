@@ -9,7 +9,6 @@ label_encoder = LabelEncoder()
 
 #get data
 trainData = pd.read_csv('./train/train.tsv', sep='\t',header=None)
-testData = pd.read_csv('./test-A/in.tsv', sep='\t',header=None)
 
 y = trainData[trainData.columns[0]]
 x = trainData.ix[1,]
@@ -18,9 +17,6 @@ droppedTrainData = trainData.drop(trainData.columns[[0]], axis=1)
 
 for col in droppedTrainData:
    droppedTrainData[col] = label_encoder.fit_transform(droppedTrainData[col])
-
-for col in testData:
-    testData[col] = label_encoder.fit_transform(testData[col])
 
 X = droppedTrainData
 Y = trainData[trainData.columns[0]].apply(lambda x: 1 if x == "p" else 0)

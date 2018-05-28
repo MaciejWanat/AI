@@ -1,9 +1,9 @@
 from keras.models import model_from_json
 
-class Network:
+class MushroomRecognition:
     def __init__(self):
         self.model = None
-        self.loadModel('model/model.json','model/model.h5')
+        self.loadModel('./mushrooms_recognition/model/model.json','./mushrooms_recognition/model/model.h5')
 
     def loadModel(self,modelFileName,modelWeightsName):
         json_file = open(modelFileName, 'r')
@@ -17,10 +17,10 @@ class Network:
 
     def predict(self,test):
         prob = float(self.model.predict(test))
-        print("------------------") 
-        print("Probability: ",prob)
+        print("------------------")
+        print("Probability that a mushroom is poisonous: ",prob)
 
-        return 1 if prob >= 0.5 else 0
+        return 1 if prob < 0.5 else 0
 
     def isEdible(self,test):
         return self.predict(test)

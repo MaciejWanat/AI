@@ -6,7 +6,7 @@ from Flower import Flower
 from FlowerPower import FlowerPower
 from Grid import Grid
 from AstarSolver import AstarSolver
-from Network import Network
+from MushroomRecognition import MushroomRecognition
 from Direction import Direction
 
 class App(arcade.Window):
@@ -27,14 +27,14 @@ class App(arcade.Window):
         self.grid_map = self.grid.map
         self.aStar = AstarSolver(self.grid_map,self.start_x,self.start_y)
         self.path = self.aStar.solve()
-        self.gatherMushroomAlg = Network()
+        self.gatherMushroomAlg = MushroomRecognition()
         self.gatherFlowerAlg = FlowerPower()
-        print(self.aStar.get_path_states(self.path))
         self.actionsPath = self.aStar.get_path_states(self.path)
+        print(self.actionsPath)
 
     def on_draw(self):
         """
-        Called when update on a board has to be done
+        Called when an update on a board has to be done
         """
         arcade.start_render()
         self.grid.background_list.draw()
@@ -42,7 +42,7 @@ class App(arcade.Window):
         self.grid.mushroomPicker.draw()
 
 
-        # Put the text on the screen.
+        # Put the score on a screen.
         output = "Score: {}".format(self.score)
         arcade.draw_text(output, 10, 20, arcade.color.WHITE, 14)
 
@@ -52,10 +52,10 @@ class App(arcade.Window):
         Visualization of movement on a board
         """
         if self.actionsPath:
-            self.gatherMushrooms((self.grid.mushroomPicker.x,self.grid.mushroomPicker.y))
-            direction = self.aStar.direction
-
+            direction     = self.aStar.direction
             (action,step) = self.actionsPath.pop(0)
+
+            self.gatherItemsFromMap((self.grid.mushroomPicker.x,self.grid.mushroomPicker.y))
 
             if(action == 'Move'):
                 if(direction == Direction.EAST):
@@ -92,23 +92,30 @@ class App(arcade.Window):
             self.grid.mushroomPicker.center_y = y1
 
 
-    def gatherMushrooms(self,mushroomPickerPosition):
+    def gatherItemsFromMap(self,mushroomPickerPosition):
         nearestArea = self.aStar.get_adjacent_cells(mushroomPickerPosition[1],mushroomPickerPosition[0])
 
         for field in nearestArea:
             if(field.reachable == False):
-                if type(field) is Mushroom:    # is a mushroom 
+                if type(field) is Mushroom:
                     edible = self.gatherMushroomAlg.isEdible(field.vector)
+                    realEdibility = field.isEdible
 
-                    if(not edible):
-                        field.center_y = -100
-                        field.center_x = -100
-                        self.score +=1
+                    if(edible == realEdibility):
+                        print("The mushroom on position -> ",field.x,field.y,
+                              " is ",  "poisonous" if not edible else "edible")
 
-                    print("The mushroom on posisition -> ",field.x,field.y, " is ",  "poisonous" if edible else "edible")
-                    
-                    field.reachable = True           
-                elif type(field) is Flower:     # is a flower                
+                        if(edible):
+                            field.center_y = -100
+                            field.center_x = -100
+                            self.score +=1
+
+                    else:
+                        print("I was wrong! What's a pity! You will die in a few minutes!")
+                        self.score -=2
+
+
+                elif type(field) is Flower:
                     protected = self.gatherFlowerAlg.isProtected(field)
                     predName = self.gatherFlowerAlg.getName(field)
 
@@ -117,9 +124,9 @@ class App(arcade.Window):
                         field.center_x = -100
                         self.score +=1
 
-                    print("------------------") 
-                    print("The flower on posisition -> ",field.x,field.y, " is ",  "protected" if protected else "not protected")
-                    print("I think it's a " + predName + "!")   
+                    print("------------------")
+                    print("The flower on position -> ",field.x,field.y, " is ",  "protected" if protected else "not protected")
+                    print("I think it's a " + predName + "!")
                     print("In fact, it was a " + str(field.flowerName).title() + " (picture " + str(field.picNum) + ").")
 
                     if(str(field.flowerName).title() != str(predName)):
@@ -127,11 +134,9 @@ class App(arcade.Window):
                         self.score -=2
 
                     field.reachable = True
-                
+
 def main():
     window = App(1260,630,70,0,0)
-
     arcade.run()
-
 
 main()

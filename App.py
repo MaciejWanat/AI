@@ -108,7 +108,8 @@ class App(arcade.Window):
                         if(edible):
                             field.center_y = -100
                             field.center_x = -100
-                            self.score +=1
+
+                        self.score +=1
 
                     else:
                         print("I was wrong! What's a pity! You will die in a few minutes!")

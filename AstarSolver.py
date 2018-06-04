@@ -44,15 +44,15 @@ class AstarSolver(object):
 
     def get_path(self):
         cell = self.end
-        path = [(cell.x, cell.y)]
+        path = [cell]
         if cell.parent is not None:
             while cell.parent is not self.start:
                 cell = cell.parent
-                path.append((cell.x, cell.y))
+                path.append(cell)
         else:
             return path
 
-        path.append((self.start.x, self.start.y))
+        path.append(self.start)
         path.reverse()
         return path
 

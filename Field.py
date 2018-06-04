@@ -16,7 +16,7 @@ class Field(arcade.Sprite):
         self.g = 0
         self.h = 10
         self.f = 0
-        self.action = None
+        self.action = []
 
     def __lt__(self, other):
         if isinstance(other, self.__class__):

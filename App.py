@@ -26,10 +26,10 @@ class App(arcade.Window):
         self.grid = Grid(self.grid_width,self.grid_height,self.block_size,self.start_x,self.start_y)
         self.grid_map = self.grid.map
         self.aStar = AstarSolver(self.grid_map,self.start_x,self.start_y)
-        self.path = self.aStar.solve()
+        self.actionsPath = self.aStar.solve()
         self.gatherMushroomAlg = MushroomRecognition()
         self.gatherFlowerAlg = FlowerPower()
-        self.actionsPath = self.aStar.get_path_states(self.path)
+        #self.actionsPath = self.aStar.get_path_states(self.path)
         print(self.actionsPath)
 
     def on_draw(self):
@@ -53,7 +53,7 @@ class App(arcade.Window):
         """
         if self.actionsPath:
             direction     = self.aStar.direction
-            (action,step) = self.actionsPath.pop(0)
+            (action,step) = self.actionsPath.pop(0).action
 
             self.gatherItemsFromMap((self.grid.mushroomPicker.x,self.grid.mushroomPicker.y))
 

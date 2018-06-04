@@ -40,7 +40,17 @@ class AstarSolver(object):
 
         toCheck = list(set(neighbors(x,y)) - set(skewNeighbors))
 
-        return [self.cells[x][y] for (x,y) in toCheck]
+#poprzednio ta linijka byla zwracana
+        adjFields = [self.cells[x][y] for (x,y) in toCheck]
+
+        adjFieldsWithAction=[]
+        for element in adjFields:
+            dir = self.computeState(x,y,element.x,element.y)
+            if dir == 2:
+                adjFieldsWithAction.append((element,[('Move',0)]))
+            if dir == 1:
+                adjFieldsWithAction.append((element,[('Move',0),('Rotate',dir)]))
+        return adjFieldsWithAction
 
     def get_path(self):
         cell = self.end
@@ -94,6 +104,7 @@ class AstarSolver(object):
         adj.g = cell.g + 10
         adj.h = self.get_heuristic(adj)
         adj.parent = cell
+        cell.action = adj[1]
         adj.f = adj.h + adj.g
         #print('Updated coordinates: ', adj.x, adj.y)
 
@@ -111,12 +122,12 @@ class AstarSolver(object):
             adj_cells = self.get_adjacent_cells(cell.x,cell.y)
 
             for adj_cell in adj_cells:
-                if adj_cell.reachable and adj_cell not in self.closed:
-                    if (adj_cell.f, adj_cell) in self.opened:
+                if adj_cell[0].reachable and adj_cell[0] not in self.closed:
+                    if (adj_cell[0].f, adj_cell[0]) in self.opened:
 
-                        if adj_cell.g > cell.g + 10:
+                        if adj_cell[0].g > cell.g + 10:
                             self.update_cell(adj_cell, cell)
 
                     else:
                         self.update_cell(adj_cell, cell)
-                        heapq.heappush(self.opened, (adj_cell.f, adj_cell))
+                        heapq.heappush(self.opened, (adj_cell[0].f, adj_cell[0]))

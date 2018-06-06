@@ -30,7 +30,7 @@ class App(arcade.Window):
         self.gatherMushroomAlg = MushroomRecognition()
         self.gatherFlowerAlg = FlowerPower()
         #self.actionsPath = self.aStar.get_path_states(self.path)
-        print(self.actionsPath)
+        print("to jest ten print: ",self.actionsPath)
 
     def on_draw(self):
         """
@@ -53,7 +53,7 @@ class App(arcade.Window):
         """
         if self.actionsPath:
             direction     = self.aStar.direction
-            (action,step) = self.actionsPath.pop(0).action
+            (action,step) = self.actionsPath.pop(0)
 
             self.gatherItemsFromMap((self.grid.mushroomPicker.x,self.grid.mushroomPicker.y))
 
@@ -93,7 +93,7 @@ class App(arcade.Window):
 
 
     def gatherItemsFromMap(self,mushroomPickerPosition):
-        nearestArea = self.aStar.get_adjacent_cells(mushroomPickerPosition[1],mushroomPickerPosition[0])
+        nearestArea = self.aStar.get_adjacent_cells_2(mushroomPickerPosition[1],mushroomPickerPosition[0])
 
         for field in nearestArea:
             if(field.reachable == False):

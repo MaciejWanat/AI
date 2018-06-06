@@ -31,5 +31,5 @@ class Field(arcade.Sprite):
 
     def set_parent(self, parent):
         self.parent = parent
-     def set_action(self, action):
-        self.action = action
+    def set_action(self, action):
+       self.action = action

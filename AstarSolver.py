@@ -14,11 +14,33 @@ class AstarSolver(object):
         self.end = self.cells[self.grid_height - 1][self.grid_width -1]
 
     def get_heuristic(self, cell):
-        return (abs(cell.x - self.end.x) + abs(cell.y - self.end.y))
+        return (abs(cell[0].x - self.end.x) + abs(cell[0].y - self.end.y))
 
     def get_cell(self, x, y):
 
         return self.cells[x][y]
+    
+    def get_adjacent_cells_2(self, x, y):                                                                                                               
+                                                                                                                                                      
+        # Size of "board"                                                                                                                             
+        Y = self.grid_width - 1                                                                                                                       
+        X = self.grid_height - 1                                                                                                                      
+                                                                                                                                                      
+        skewNeighbors = [(x - 1, y - 1),(x + 1, y - 1),                                                                                               
+                         (x - 1, y + 1), (x + 1, y + 1)]                                                                                              
+                                                                                                                                                      
+                                                                                                                                                      
+        neighbors = lambda x, y : [(x2, y2) for x2 in range(x-1, x+2)                                                                                 
+                                       for y2 in range(y-1, y+2)                                                                                      
+                                       if (-1 < x <= X and                                                                                            
+                                           -1 < y <= Y and                                                                                            
+                                           (x != x2 or y != y2) and                                                                                   
+                                           (0 <= x2 <= X) and                                                                                         
+                                           (0 <= y2 <= Y))]                                                                                           
+                                                                                                                                                      
+        toCheck = list(set(neighbors(x,y)) - set(skewNeighbors))                                                                                      
+                                                                                                                                                      
+        return [self.cells[x][y] for (x,y) in toCheck]  
 
     def get_adjacent_cells(self, x, y):
 
@@ -42,29 +64,32 @@ class AstarSolver(object):
 
 #poprzednio ta linijka byla zwracana
         adjFields = [self.cells[x][y] for (x,y) in toCheck]
-
+        print("adjfields: ", adjFields)
         adjFieldsWithAction=[]
         for element in adjFields:
-            dir = self.computeState(x,y,element.x,element.y)
-            if dir == 2:
+            dir = self.computeState(y,x,element.y,element.x)
+            print("dir value; ",dir)
+            if dir == Direction.EAST:
                 adjFieldsWithAction.append((element,[('Move',0)]))
-            if dir == 1:
+            if dir == Direction.NORTH:
                 adjFieldsWithAction.append((element,[('Move',0),('Rotate',dir)]))
+
         return adjFieldsWithAction
 
     def get_path(self):
         cell = self.end
-        path = [cell]
+        path = [cell.action]
         if cell.parent is not None:
             while cell.parent is not self.start:
                 cell = cell.parent
-                path.append(cell)
+                path.append(cell.action)
         else:
             return path
 
-        path.append(self.start)
+        # path.append(self.start.action)
+        print(path)
         path.reverse()
-        return path
+        return [y for x in path for y in x]
 
     def get_path_states(self,path):
         states = []
@@ -101,11 +126,14 @@ class AstarSolver(object):
         @param adj adjacent cell to current cell
         @param cell current cell being processed
         """
-        adj.g = cell.g + 10
-        adj.h = self.get_heuristic(adj)
-        adj.parent = cell
+        adj[0].g = cell.g + 10
+        adj[0].h = self.get_heuristic(adj)
+        adj[0].parent = cell
+        
+        #lista krotek akcji jakie wykonamy by dojść do adj
         cell.action = adj[1]
-        adj.f = adj.h + adj.g
+        
+        adj[0].f = adj[0].h + adj[0].g
         #print('Updated coordinates: ', adj.x, adj.y)
 
     def solve(self):
@@ -114,14 +142,15 @@ class AstarSolver(object):
             f, cell = heapq.heappop(self.opened)
 
             self.closed.add(cell)
-
+            print(cell)
             if cell is self.end:
                 return self.get_path()
 
 
             adj_cells = self.get_adjacent_cells(cell.x,cell.y)
-
+            print(adj_cells)
             for adj_cell in adj_cells:
+                print(adj_cell)
                 if adj_cell[0].reachable and adj_cell[0] not in self.closed:
                     if (adj_cell[0].f, adj_cell[0]) in self.opened:
 

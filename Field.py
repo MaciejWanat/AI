@@ -1,4 +1,5 @@
 import arcade
+from random import randint
 
 image_path = "app_resources/images/"
 
@@ -15,7 +16,7 @@ class Field(arcade.Sprite):
         self.h_cost = 0
         self.g = 0
         self.h = 10
-        self.f = 0
+        self.f = randint(10, 200)
         self.action = []
 
     def __lt__(self, other):

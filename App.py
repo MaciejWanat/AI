@@ -29,8 +29,12 @@ class App(arcade.Window):
         self.actionsPath = self.aStar.solve()
         self.gatherMushroomAlg = MushroomRecognition()
         self.gatherFlowerAlg = FlowerPower()
-        #self.actionsPath = self.aStar.get_path_states(self.path)
-        print("to jest ten print: ",self.actionsPath)
+        self.fieldsPath = self.aStar.get_path_fields()
+        #print("to jest ten print: ",self.actionsPath)
+        #print("to jest ścieżka coordów: ",self.coordsPath)
+        for element in self.fieldsPath[::-1]:
+            print("field coords:", element.x," ",element.y," ","\n","field actions: ",element.action,"\n")
+        print("end: ",self.grid_width, " ", self.grid_height)
 
     def on_draw(self):
         """

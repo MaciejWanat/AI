@@ -68,14 +68,21 @@ class AstarSolver(object):
         adjFieldsWithAction=[]
 
         for element in adjFields:
-            print(element)
-            cur_direction = self.direction
+            # print(element)
+            parent = self.get_cell(x,y).get_parent()
+            print(parent)
+            if parent is not None:
+                cur_direction = self.computeStateFrom(x,y,parent.x,parent.y)
+            else:
+                cur_direction=self.direction
             new_direction = self.computeState(x,y,element.x,element.y)
 
             if(cur_direction == new_direction):
                 adjFieldsWithAction.append((element,[("Move",1)]))
+                print("jestem na: ",x,y,"\nide na: ",element.x,element.y,"\nkierunek obecny: ",cur_direction," nowy kierunek: ", new_direction,"\n")
             else:
                 adjFieldsWithAction.append((element,[("Rotate",new_direction),("Move",1)]))
+                print("jestem na: ",x,y,"\nrotuje na: ",element.x,element.y,"\nkierunek obecny: ",cur_direction," nowy kierunek: ", new_direction,"\n")
 
 
         return adjFieldsWithAction
@@ -94,25 +101,23 @@ class AstarSolver(object):
 
         path.append(self.start.action)
         path.reverse()
-        print('end path',path)
+        # print('end path',path)
 
         return [y for x in path for y in x]
 
-    def get_path_states(self,path):
-        states = []
-        direction = self.direction
+    def get_path_fields(self):
+        cell = self.end
+        path = [cell]
+        if cell.parent is not None:
+            while cell.parent is not self.start:
+                cell = cell.parent
+                # print(cell)
+                path.append(cell)
+        else:
+            return path
 
-        for i in range(len(path)-1):
-            new_direction = self.computeState(path[i][0],path[i][1],path[i+1][0],path[i+1][1])
-
-            if(direction == new_direction):
-                states.append(("Move",0))
-            else:
-                states.append(("Rotate",new_direction))
-                states.append(("Move",0))
-                direction = new_direction
-
-        return states
+        path.append(self.start)
+        return path
 
     def computeState(self,Y,X,y,x):
 
@@ -127,6 +132,19 @@ class AstarSolver(object):
             return Direction.WEST
 
         return Direction.SOUTH
+    def computeStateFrom(self,Y,X,y,x):
+
+        dir_x = x - X
+        dir_y = y-Y
+
+        if(dir_x == 1):
+            return Direction.WEST
+        if(dir_y == 1):
+            return Direction.SOUTH
+        if(dir_x == -1):
+            return Direction.EAST
+
+        return Direction.NORTH
 
     def update_cell(self, adj, cell,actions):
         """Update adjacent cell.
@@ -140,7 +158,7 @@ class AstarSolver(object):
         #lista krotek akcji jakie wykonamy by dojść do adj
         #cell.action = adj[1]
         adj.action = actions
-        print(actions)
+        #print(actions)
 
         if actions[0][0] == 'Rotate':
             self.direction = actions[0][1]
@@ -170,7 +188,9 @@ class AstarSolver(object):
 
                         if field.g > cell.g + 100:
                             self.update_cell(field, cell, actions)
+                            print("aktualizuje: ",field.x,field.y,"\nakcja: ",actions,"\n")
 
                     else:
                         self.update_cell(field, cell, actions)
+                        print("dodaje nowe: ",field.x,field.y,"\nakcja: ",actions,"\n")
                         heapq.heappush(self.opened, (field.f, field))

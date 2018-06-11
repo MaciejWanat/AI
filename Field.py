@@ -12,11 +12,9 @@ class Field(arcade.Sprite):
         self.center_x = center_x
         self.center_y = center_y
         self.reachable = reachable
-        self.g_cost = 0
-        self.h_cost = 0
-        self.g = 0
+        self.g = randint(10, 200)
         self.h = 10
-        self.f = randint(10, 200)
+        self.f = 0
         self.action = []
 
     def __lt__(self, other):

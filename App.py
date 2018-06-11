@@ -29,12 +29,6 @@ class App(arcade.Window):
         self.actionsPath = self.aStar.solve()
         self.gatherMushroomAlg = MushroomRecognition()
         self.gatherFlowerAlg = FlowerPower()
-        self.fieldsPath = self.aStar.get_path_fields()
-        #print("to jest ten print: ",self.actionsPath)
-        #print("to jest ścieżka coordów: ",self.coordsPath)
-        for element in self.fieldsPath[::-1]:
-            print("field coords:", element.x," ",element.y," ","\n","field actions: ",element.action,"\n")
-        print("end: ",self.grid_width, " ", self.grid_height)
 
     def on_draw(self):
         """
@@ -56,9 +50,10 @@ class App(arcade.Window):
         Visualization of movement on a board
         """
         if self.actionsPath:
-            direction     = self.aStar.direction
+            direction     = self.aStar.currentDirection
+            print(direction)
             (action,step) = self.actionsPath.pop(0)
-
+            print('current move -> ',action,step)
             self.gatherItemsFromMap((self.grid.mushroomPicker.x,self.grid.mushroomPicker.y))
 
             if(action == 'Move'):
@@ -75,7 +70,7 @@ class App(arcade.Window):
                     self.grid.mushroomPicker.y -= 1
 
             elif(action == 'Rotate'):
-                self.aStar.direction = step
+                self.aStar.currentDirection = step
 
                 if(step == Direction.NORTH):
                     self.grid.mushroomPicker.angle = 90

@@ -13,6 +13,7 @@ class AstarSolver(object):
         self.grid_width = len(grid[0])
         self.start = self.cells[start_y][start_x]
         self.direction = Direction.EAST
+        self.currentDirection = Direction.EAST
         self.end = self.cells[self.grid_height - 1][self.grid_width -1]
 
     def get_heuristic(self, cell):

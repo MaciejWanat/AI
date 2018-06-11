@@ -20,3 +20,6 @@ def swicz(x):
 def getFilename(x,y):
     symbol = list(gaGrid[x][y])[0]
     return swicz(symbol)
+
+def isWater(x,y):
+    return list(gaGrid[x][y])[0] =='w'

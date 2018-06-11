@@ -130,10 +130,11 @@ class AstarSolver(object):
 
     def update_cell(self, adj, cell,actions):
         """Update adjacent cell.
-        @param adj adjacent cell to current cell
-        @param cell current cell being processed
+            @param adj adjacent cell to current cell
+            @param cell current cell being processed
         """
-        adj.g = cell.g + 10
+        adj.g = cell.g
+        # adj.g = cell.g + 10 # + cell.fieldCost
         adj.h = self.get_heuristic(adj)
         adj.parent = cell
 

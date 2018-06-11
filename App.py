@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import arcade
 
+import gaMap
+
 from Mushroom import Mushroom
 from Flower import Flower
 from FlowerPower import FlowerPower
@@ -8,6 +10,7 @@ from Grid import Grid
 from AstarSolver import AstarSolver
 from MushroomRecognition import MushroomRecognition
 from Direction import Direction
+
 
 class App(arcade.Window):
     def __init__(self, width, height,block_size,start_x,start_y):
@@ -141,7 +144,8 @@ class App(arcade.Window):
                     field.reachable = True
 
 def main():
-    window = App(1260,630,70,0,0)
+    gaMap.init()
+    window = App(800,800,40,0,0)
     arcade.run()
 
 main()

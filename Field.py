@@ -1,20 +1,22 @@
 import arcade
+import gaMap
+import sys
 from random import randint
 
 image_path = "app_resources/images/"
 
 class Field(arcade.Sprite):
     def __init__(self, x, y,center_x,center_y,filename,reachable):
-        super().__init__(image_path + filename + ".png", 1)
+        super().__init__(image_path + filename + ".png", 0.5)
+
         self.parent = None
         self.x = x
         self.y = y
         self.center_x = center_x
-        self.center_y = center_y
+        # possiton on tail \/
+        self.center_y = center_y - 40
         self.reachable = reachable
-        self.g_cost = 0
-        self.h_cost = 0
-        self.g = 0
+        self.g = gaMap.getCost(x,y)
         self.h = 10
         self.f = randint(10, 200)
         self.action = []

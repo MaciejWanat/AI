@@ -8,6 +8,12 @@ from Flower import Flower
 from MushroomPicker import MushroomPicker
 from random import randint
 
+
+import gaMap
+import sys
+
+
+
 class Grid:
     def __init__(self, width, height, block_size,start_x,start_y):
         self.grid = []
@@ -19,7 +25,7 @@ class Grid:
         self.mushroomPicker = None
         self.mushroomPicker_start_x = start_x
         self.mushroomPicker_start_y = start_y
-        self.SPRITE_SCALING = 1
+        self.SPRITE_SCALING = 0.9
         self.setup()
 
     def setup(self):
@@ -49,7 +55,7 @@ class Grid:
                     if(mushOrFlower == 0):
                         grid[row].append(Flower(row,column,x,y))
                     else:
-                        grid[row].append(Mushroom(row,column,x,y)) 
+                        grid[row].append(Mushroom(row,column,x,y,2)) 
                 else:
                     grid[row].append(Field(row,column,x,y,"field",True))
 
@@ -59,14 +65,17 @@ class Grid:
         return grid
 
     def drawBackground(self):
+
         for row in range(self.height):
             for column in range(self.width):
                 x =  self.field_width * column + self.field_width // 2
                 y =  self.field_height * row + self.field_height // 2
+                filename = gaMap.getFilename(row,column)
+                print(filename)
 
-                background_sprite = arcade.Sprite("app_resources/images/background_lines.png", self.SPRITE_SCALING)
-                background_sprite.width = self.field_width;
-                background_sprite.height = self.field_height;
+                background_sprite = arcade.Sprite("app_resources/images/" + filename + ".png", self.SPRITE_SCALING*100)
+                background_sprite.width = self.field_width
+                background_sprite.height = self.field_height
                 background_sprite.center_x = x
                 background_sprite.center_y = y
                 self.background_list.append(background_sprite)

@@ -3,17 +3,22 @@ from random import randint
 
 image_path = "app_resources/images/"
 
+import pandas as pd
+gaGrid = pd.read_csv('app_resources/map.csv', sep=',',header=None)
+
+
 class Field(arcade.Sprite):
     def __init__(self, x, y,center_x,center_y,filename,reachable):
-        super().__init__(image_path + filename + ".png", 1)
+        super().__init__(image_path + filename + ".png", 0.5)
         self.parent = None
         self.x = x
         self.y = y
         self.center_x = center_x
         self.center_y = center_y
         self.reachable = reachable
-        self.g = randint(10, 200)
+        # self.g = randint(10, 200)
         self.h = 10
+        self.g = int(list(gaGrid[x][y])[1])
         self.f = 0
         self.action = []
 

@@ -140,7 +140,7 @@ class App(arcade.Window):
                     field.reachable = True
 
 def main():
-    window = App(1260,630,70,0,0)
+    window = App(800,800,40,0,0)
     arcade.run()
 
 main()

@@ -33,7 +33,6 @@ from keras.models import Sequential, Model
 from keras.layers import Dense, GlobalAveragePooling2D
 from keras.layers import Activation, Dropout, Flatten, Dense
 from keras import backend as K
-import tensorflow as tf
 # Any results you write to the current directory are saved as output.
 
 
@@ -104,8 +103,8 @@ import tensorflow as tf
 img_width, img_height = 224, 224 # we set the img_width and img_height according to the pretrained models we are
 # going to use. The input size for ResNet-50 is 224 by 224 by 3.
 
-train_data_dir = '/home/marvin/AI/fruits-360/Training'
-validation_data_dir = '/home/marvin/AI/fruits-360/Test'
+train_data_dir = 'F:\\fruits\\fruits-360\\Training'
+validation_data_dir = 'F:\\fruits\\fruits-360\\Test'
 # nb_train_samples = 31688
 # nb_validation_samples = 10657
 batch_size = 16
@@ -262,21 +261,23 @@ print(device_lib.list_local_devices())
 
 # In[28]:
 
-
 import tensorflow as tf
-with tf.device("/device:CPU:0"):
-    history_pretrained = inception_transfer.fit_generator(
-    train_generator,
-    epochs=5, shuffle = True, verbose = 1, validation_data = validation_generator)
+with tf.device("/device:GPU:0"):
+    optionsGPU = tf.GPUOptions(per_process_gpu_memory_fraction=0.4)
+    configGPU = tf.ConfigProto(gpu_options=optionsGPU)
+    with tf.Session(config=configGPU):
+        history_pretrained = inception_transfer.fit_generator(train_generator,epochs=5, shuffle = True, verbose = 1, validation_data = validation_generator)
+        
 
 
-# In[29]:
+# In[29]: 
 
 
-with tf.device("/device:CPU:0"):
-    history_vanilla = inception_transfer_vanilla.fit_generator(
-    train_generator,
-    epochs=5, shuffle = True, verbose = 1, validation_data = validation_generator)
+with tf.device("/device:GPU:0"):
+    optionsGPU = tf.GPUOptions(per_process_gpu_memory_fraction=0.4)
+    configGPU = tf.ConfigProto(gpu_options=optionsGPU)
+    with tf.Session(config=configGPU):
+        history_vanilla = inception_transfer_vanilla.fit_generator(train_generator,epochs=5, shuffle = True, verbose = 1, validation_data = validation_generator)
 
 
 # In[30]:

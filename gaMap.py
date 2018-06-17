@@ -1,8 +1,11 @@
 import pandas as pd
+from random import randint
 
 class gaMap():
     def __init__(self):
-        self.gaGrid = pd.read_csv('app_resources/map.csv', sep=',',header=None)
+        filename = 'map ('+ str(randint(0, 10)) +').csv'
+        filename = 'map (0).csv'
+        self.gaGrid = pd.read_csv('app_resources/maps/'+filename, sep=',',header=None)
 
     def getCost(self, x,y):
         return int(list(self.gaGrid[x][y])[1])

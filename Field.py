@@ -3,8 +3,10 @@ from random import randint
 
 image_path = "app_resources/images/"
 
-import pandas as pd
-gaGrid = pd.read_csv('app_resources/map.csv', sep=',',header=None)
+# import pandas as pd
+# filename = 'map ('+ str(randint(0, 10)) +').csv'
+# gaGrid = pd.read_csv('app_resources/maps/'+filename, sep=',',header=None)
+# gaGrid = pd.read_csv('app_resources/map.csv', sep=',',header=None)
 
 
 class Field(arcade.Sprite):

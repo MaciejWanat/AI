@@ -6,7 +6,7 @@ from random import randint
 image_path = "app_resources/images/"
 
 class Field(arcade.Sprite):
-    def __init__(self, x, y,center_x,center_y,filename,reachable):
+    def __init__(self, x, y,center_x,center_y,filename,gaMap, reachable = True):
         super().__init__(image_path + filename + ".png", 0.5)
 
         self.parent = None
@@ -16,9 +16,12 @@ class Field(arcade.Sprite):
         # possiton on tail \/
         self.center_y = center_y - 40
         self.reachable = reachable
-        self.g = gaMap.getCost(x,y)
         self.h = 10
         self.f = randint(10, 200)
+        
+        self.gaMap = gaMap
+        self.g = self.gaMap.getCost(x,y) * 10
+        
         self.action = []
 
     def __lt__(self, other):

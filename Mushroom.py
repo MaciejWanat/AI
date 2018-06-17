@@ -15,14 +15,15 @@ y = testData[testData.columns[0]]
 vector = testData.drop(testData.columns[[0]], axis=1)
 
 class Mushroom(Field):
-    def __init__(self, x, y,center_x,center_y, reachable=False):
+    def __init__(self, x, y,center_x,center_y, gaMap,reachable=True):
         self.isEdible = None
         self.vector = None
         self.loadConfig()
+        self.gaMap = gaMap
 
         super().__init__(x, y, center_x, center_y,
                          not self.isEdible and image_path + "red" or image_path + random.choice(["brown","tan"])
-                         ,False)
+                         ,self.gaMap, reachable)
         self.h = 100
 
     def loadConfig(self):

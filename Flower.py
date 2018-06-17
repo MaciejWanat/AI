@@ -6,13 +6,13 @@ from Field import Field
 from random import randint
 
 class Flower(Field):
-    def __init__(self, x, y,center_x,center_y, reachable=False):
+    def __init__(self, x, y,center_x,center_y, gaMap, reachable=True):
         self.isProtected = None
         self.flowerName = None
         self.picNum = None
         self.loadConfig()
-
-        super().__init__(x, y, center_x, center_y, self.flowerName, False)
+        self.gaMap = gaMap
+        super().__init__(x, y, center_x, center_y, self.flowerName, self.gaMap,reachable)
         self.h = 1000
 
     def loadConfig(self):

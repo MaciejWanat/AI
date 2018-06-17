@@ -165,7 +165,7 @@ class AstarSolver(object):
             for adj_cell in adj_cells:
                 field = adj_cell[0]
                 actions = adj_cell[1]
-
+                print(field.reachable)
                 if field.reachable and field not in self.closed:
                     if (field.f, field) in self.opened:
 

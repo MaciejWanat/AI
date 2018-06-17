@@ -14,6 +14,7 @@ class Field(arcade.Sprite):
         self.parent = None
         self.x = x
         self.y = y
+        self.picked = False
         self.center_x = center_x
         self.center_y = center_y
         self.reachable = reachable

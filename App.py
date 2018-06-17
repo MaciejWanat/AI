@@ -99,7 +99,7 @@ class App(arcade.Window):
         nearestArea = self.aStar.get_adjacent_cells_2(mushroomPickerPosition[1],mushroomPickerPosition[0])
 
         for field in nearestArea:
-            if(True):
+            if(field.picked != True):
                 if type(field) is Mushroom:
                     edible = self.gatherMushroomAlg.isEdible(field.vector)
                     realEdibility = field.isEdible
@@ -119,6 +119,7 @@ class App(arcade.Window):
                         self.score -=2
 
                     field.reachable = True
+                    field.picked = True
 
                 elif type(field) is Flower:
 
@@ -142,6 +143,7 @@ class App(arcade.Window):
                         self.score -=2
 
                     field.reachable = True
+                    field.picked = True
 
 def main():
     window = App(800,800,40,0,0)

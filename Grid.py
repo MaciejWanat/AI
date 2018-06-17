@@ -5,6 +5,7 @@ import arcade
 from Field import Field
 from Mushroom import Mushroom
 from Flower import Flower
+from Fruit import Fruit
 from MushroomPicker import MushroomPicker
 from random import randint
 

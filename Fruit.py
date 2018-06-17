@@ -3,40 +3,21 @@ import arcade
 import random
 
 from Field import Field
-from sklearn.preprocessing import LabelEncoder
-from sklearn.preprocessing import OneHotEncoder
+from random import randint
 
-label_encoder = LabelEncoder()
-image_path = "tallShroom_"
-
-testData = pd.read_csv('./mushrooms_recognition/test-A/test_in.tsv', sep='\t')
-
-y = testData[testData.columns[0]]
-vector = testData.drop(testData.columns[[0]], axis=1)
-
-class Mushroom(Field):
+class Fruit(Field):
     def __init__(self, x, y,center_x,center_y, reachable=False):
-        self.isEdible = None
-        self.vector = None
+        # self.isProtected = None
+        self.fruitName = None
+        self.picture = None
         self.loadConfig()
-
-        super().__init__(x, y, center_x, center_y,
-                         not self.isEdible and image_path + "red" or image_path + random.choice(["brown","tan"])
-                         ,False)
-        self.h = 100
+        super().__init__(x, y, center_x, center_y, self.fruitName, False)
+        self.h = 1000
 
     def loadConfig(self):
-        for col in vector:
-            vector[col] = label_encoder.fit_transform(vector[col])
-
-        self.vector = vector.sample(n=1)
-
-        index = self.vector.index.item()
-
-        if(y[index] == 'e'):
-            self.isEdible = 1
-        else:
-            self.isEdible = 0
-
+        labels = os.listdir('./fruits_recognition/Test')
+        self.fruitName = random.choice(labels)
+        images = os.listdir('./fruits_recognition/Test/%s'%(self.fruitName))
+        self.picture = random.choice(images)
     def __lt__(self, other):
         return self.h <= other.h

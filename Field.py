@@ -8,8 +8,9 @@ gaGrid = pd.read_csv('app_resources/map.csv', sep=',',header=None)
 
 
 class Field(arcade.Sprite):
-    def __init__(self, x, y,center_x,center_y,filename,reachable):
+    def __init__(self, x, y,center_x,center_y,filename,gaMap, reachable = True):
         super().__init__(image_path + filename + ".png", 0.5)
+
         self.parent = None
         self.x = x
         self.y = y
@@ -18,8 +19,12 @@ class Field(arcade.Sprite):
         self.reachable = reachable
         # self.g = randint(10, 200)
         self.h = 10
-        self.g = int(list(gaGrid[x][y])[1])
-        self.f = 0
+        # self.g = int(list(gaGrid[x][y])[1])
+        self.f = randint(10, 200)
+
+        self.gaMap = gaMap
+        self.g = self.gaMap.getCost(x,y) * 10
+
         self.action = []
 
     def __lt__(self, other):

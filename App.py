@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import arcade
 
+from gaMap import gaMap
+
 from Mushroom import Mushroom
 from Flower import Flower
 from FlowerPower import FlowerPower
@@ -8,6 +10,7 @@ from Grid import Grid
 from AstarSolver import AstarSolver
 from MushroomRecognition import MushroomRecognition
 from Direction import Direction
+
 
 class App(arcade.Window):
     def __init__(self, width, height,block_size,start_x,start_y):
@@ -23,7 +26,8 @@ class App(arcade.Window):
         self.score = 0
         self.start_x = start_x
         self.start_y = start_y
-        self.grid = Grid(self.grid_width,self.grid_height,self.block_size,self.start_x,self.start_y)
+        self.gaMap = gaMap()
+        self.grid = Grid(self.grid_width,self.grid_height,self.block_size,self.start_x,self.start_y, self.gaMap)
         self.grid_map = self.grid.map
         self.aStar = AstarSolver(self.grid_map,self.start_x,self.start_y)
         self.actionsPath = self.aStar.solve()
@@ -95,7 +99,7 @@ class App(arcade.Window):
         nearestArea = self.aStar.get_adjacent_cells_2(mushroomPickerPosition[1],mushroomPickerPosition[0])
 
         for field in nearestArea:
-            if(field.reachable == False):
+            if(True):
                 if type(field) is Mushroom:
                     edible = self.gatherMushroomAlg.isEdible(field.vector)
                     realEdibility = field.isEdible

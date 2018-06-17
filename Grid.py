@@ -8,8 +8,9 @@ from Flower import Flower
 from MushroomPicker import MushroomPicker
 from random import randint
 
+
 class Grid:
-    def __init__(self, width, height, block_size,start_x,start_y):
+    def __init__(self, width, height, block_size,start_x,start_y, gaMap):
         self.grid = []
         self.width = width
         self.height = height
@@ -19,7 +20,8 @@ class Grid:
         self.mushroomPicker = None
         self.mushroomPicker_start_x = start_x
         self.mushroomPicker_start_y = start_y
-        self.SPRITE_SCALING = 1
+        self.SPRITE_SCALING = 0.7
+        self.gaMap = gaMap
         self.setup()
 
     def setup(self):
@@ -44,29 +46,33 @@ class Grid:
                 x =  self.field_width * column + self.field_width // 2
                 y =  self.field_height * row + self.field_height // 2
 
-                if(row % 2 and random.randint(0, 1) == 1):
-                    mushOrFlower = randint(0, 1)
-                    if(mushOrFlower == 0):
-                        grid[row].append(Flower(row,column,x,y))
+                if self.gaMap.isWater(column,row):
+                    # grid[row].append(Field(row,column,x,y,"mushroompicker",self.gaMap, False))
+                    grid[row].append(Field(row,column,x,y,"field",self.gaMap, False))
+                else:               
+                    if(row % 2 and random.randint(0, 1) == 1):
+                        mushOrFlower = randint(0, 1)
+                        if(mushOrFlower == 0):
+                            grid[row].append(Flower(row,column,x,y,self.gaMap, True))
+                        else:
+                            grid[row].append(Mushroom(row,column,x,y,self.gaMap, True)) 
                     else:
-                        grid[row].append(Mushroom(row,column,x,y)) 
-                else:
-                    grid[row].append(Field(row,column,x,y,"field",True))
+                        grid[row].append(Field(row,column,x,y,"field",self.gaMap, True))
 
                 self.items.append(grid[row][column])
-
-
         return grid
 
     def drawBackground(self):
+
         for row in range(self.height):
             for column in range(self.width):
-                x =  self.field_width * column + self.field_width // 2
-                y =  self.field_height * row + self.field_height // 2
-
-                background_sprite = arcade.Sprite("app_resources/images/background_lines.png", self.SPRITE_SCALING)
-                background_sprite.width = self.field_width;
-                background_sprite.height = self.field_height;
+                x =  self.field_width * row + self.field_width // 2
+                y =  self.field_height * column + self.field_height // 2
+                filename = self.gaMap.getFilename(row,column)
+                # print(str(column) + ' ' + str(row))
+                background_sprite = arcade.Sprite("app_resources/images/" + filename + ".png", self.SPRITE_SCALING*100)
+                background_sprite.width = self.field_width
+                background_sprite.height = self.field_height
                 background_sprite.center_x = x
                 background_sprite.center_y = y
                 self.background_list.append(background_sprite)

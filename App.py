@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import arcade
 
+from gaMap import gaMap
+
 from Mushroom import Mushroom
 from Flower import Flower
 from FlowerPower import FlowerPower
@@ -8,6 +10,7 @@ from Grid import Grid
 from AstarSolver import AstarSolver
 from MushroomRecognition import MushroomRecognition
 from Direction import Direction
+
 
 class App(arcade.Window):
     def __init__(self, width, height,block_size,start_x,start_y):
@@ -23,14 +26,13 @@ class App(arcade.Window):
         self.score = 0
         self.start_x = start_x
         self.start_y = start_y
-        self.grid = Grid(self.grid_width,self.grid_height,self.block_size,self.start_x,self.start_y)
+        self.gaMap = gaMap()
+        self.grid = Grid(self.grid_width,self.grid_height,self.block_size,self.start_x,self.start_y, self.gaMap)
         self.grid_map = self.grid.map
         self.aStar = AstarSolver(self.grid_map,self.start_x,self.start_y)
-        self.path = self.aStar.solve()
+        self.actionsPath = self.aStar.solve()
         self.gatherMushroomAlg = MushroomRecognition()
         self.gatherFlowerAlg = FlowerPower()
-        self.actionsPath = self.aStar.get_path_states(self.path)
-        print(self.actionsPath)
 
     def on_draw(self):
         """
@@ -52,9 +54,10 @@ class App(arcade.Window):
         Visualization of movement on a board
         """
         if self.actionsPath:
-            direction     = self.aStar.direction
+            direction     = self.aStar.currentDirection
+            print(direction)
             (action,step) = self.actionsPath.pop(0)
-
+            print('current move -> ',action,step)
             self.gatherItemsFromMap((self.grid.mushroomPicker.x,self.grid.mushroomPicker.y))
 
             if(action == 'Move'):
@@ -71,7 +74,7 @@ class App(arcade.Window):
                     self.grid.mushroomPicker.y -= 1
 
             elif(action == 'Rotate'):
-                self.aStar.direction = step
+                self.aStar.currentDirection = step
 
                 if(step == Direction.NORTH):
                     self.grid.mushroomPicker.angle = 90
@@ -93,10 +96,10 @@ class App(arcade.Window):
 
 
     def gatherItemsFromMap(self,mushroomPickerPosition):
-        nearestArea = self.aStar.get_adjacent_cells(mushroomPickerPosition[1],mushroomPickerPosition[0])
+        nearestArea = self.aStar.get_adjacent_cells_2(mushroomPickerPosition[1],mushroomPickerPosition[0])
 
         for field in nearestArea:
-            if(field.reachable == False):
+            if(field.picked != True):
                 if type(field) is Mushroom:
                     edible = self.gatherMushroomAlg.isEdible(field.vector)
                     realEdibility = field.isEdible
@@ -116,6 +119,7 @@ class App(arcade.Window):
                         self.score -=2
 
                     field.reachable = True
+                    field.picked = True
 
                 elif type(field) is Flower:
 
@@ -139,9 +143,10 @@ class App(arcade.Window):
                         self.score -=2
 
                     field.reachable = True
+                    field.picked = True
 
 def main():
-    window = App(1260,630,70,0,0)
+    window = App(800,800,40,0,0)
     arcade.run()
 
 main()

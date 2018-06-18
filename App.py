@@ -2,6 +2,8 @@
 import arcade
 
 from gaMap import gaMap
+from Fruit import Fruit
+from FruitRecognition import FruitRecognition
 
 from Mushroom import Mushroom
 from Flower import Flower
@@ -144,6 +146,9 @@ class App(arcade.Window):
 
                     field.reachable = True
                     field.picked = True
+                
+                elif type(field) is Fruit:
+
 
 def main():
     window = App(800,800,40,0,0)

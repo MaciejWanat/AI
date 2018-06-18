@@ -4,7 +4,7 @@ from random import randint
 class gaMap():
     def __init__(self):
         filename = 'map ('+ str(randint(0, 10)) +').csv'
-        filename = 'map (0).csv'
+        # filename = 'map (0).csv'
         self.gaGrid = pd.read_csv('app_resources/maps/'+filename, sep=',',header=None)
 
     def getCost(self, x,y):

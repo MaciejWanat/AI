@@ -5,6 +5,7 @@ import arcade
 from Field import Field
 from Mushroom import Mushroom
 from Flower import Flower
+from Fruit import Fruit
 from MushroomPicker import MushroomPicker
 from random import randint
 
@@ -51,9 +52,11 @@ class Grid:
                     grid[row].append(Field(row,column,x,y,"field",self.gaMap, False))
                 else:               
                     if(row % 2 and random.randint(0, 1) == 1):
-                        mushOrFlower = randint(0, 1)
-                        if(mushOrFlower == 0):
+                        mushOrFlowerOrFruit = randint(0, 2)
+                        if(mushOrFlowerOrFruit == 0):
                             grid[row].append(Flower(row,column,x,y,self.gaMap, True))
+                        elif(mushOrFlowerOrFruit == 1):
+                            grid[row].append(Fruit(row,column,x,y,self.gaMap, True))
                         else:
                             grid[row].append(Mushroom(row,column,x,y,self.gaMap, True)) 
                     else:

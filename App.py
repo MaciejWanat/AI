@@ -13,7 +13,7 @@ from AstarSolver import AstarSolver
 from MushroomRecognition import MushroomRecognition
 from Direction import Direction
 
-
+#allFruits = ['Apple Braeburn', 'Apricot', 'Avocado', 'Banana', 'Cactus fruit', 'Cherry 1', 'Cocos', 'Grape White', 'Grapefruit Pink', 'Huckleberry', 'Kiwi', 'Lemon', 'Limes', 'Lychee', 'Mandarine', 'Mango', 'Maracuja', 'Mulberry', 'Nectarine', 'Orange', 'Papaya', 'Passion Fruit', 'Peach', 'Pear', 'Pepino', 'Pineapple', 'Pineapple Mini', 'Pitahaya Red', 'Plum', 'Pomegranate', 'Raspberry', 'Strawberry']
 class App(arcade.Window):
     def __init__(self, width, height,block_size,start_x,start_y):
         """Create whole app.
@@ -35,6 +35,7 @@ class App(arcade.Window):
         self.actionsPath = self.aStar.solve()
         self.gatherMushroomAlg = MushroomRecognition()
         self.gatherFlowerAlg = FlowerPower()
+        self.gatherFruitAlg = FruitRecognition(['Apple Braeburn',  'Avocado', 'Banana',  'Cherry 1', 'Orange',  'Passion Fruit', 'Peach', 'Pear',  'Pineapple',  'Pitahaya Red', 'Plum', 'Strawberry','Maracuja', 'Mulberry','Grapefruit Pink', 'Huckleberry' ])
 
     def on_draw(self):
         """
@@ -148,6 +149,22 @@ class App(arcade.Window):
                     field.picked = True
                 
                 elif type(field) is Fruit:
+                    predName, isInteresting = self.gatherFruitAlg.predict(field)
+                    print("------------------")
+                    print("The fruit is on position -> ",field.x,field.y)
+                    print("I think it's a " + predName + "!")
+                    if isInteresting:
+                        if(field.fruitName != predName):
+                            print("Looks like I was wrong :(")
+                            print("In fact, it was a " + field.fruitName+'\n')
+                            self.score -=2
+                        else:
+                            print("Yum yum!\n")
+                            self.score += 1
+                        field.center_y = -100
+                        field.center_x = -100
+                    field.reachable = True
+                    field.picked = True
 
 
 def main():

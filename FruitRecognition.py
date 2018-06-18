@@ -1,12 +1,16 @@
 from keras.models import model_from_json
+from keras.preprocessing.image import img_to_array, load_img
+
 import os
 from os import listdir
 
 class FruitRecognition:
-    def __init__(self):
+    def __init__(self, targetFruits):
         self.model = None
+        self.targetFruits = targetFruits
         self.loadModel('./fruits_recognition/model/model.json','./fruits_recognition/model/model.h5')
-        self.labels = os.listdir('./fruits_recognition/Test')
+        self.validation_data_dir = './fruits_recognition/Test'
+        self.labels = os.listdir(self.validation_data_dir)
 
 
     def loadModel(self,modelFileName,modelWeightsName):
@@ -16,15 +20,12 @@ class FruitRecognition:
         self.model = model_from_json(self.model)
         self.model.load_weights(modelWeightsName)
 
-    def compileModel(self):
-        self.model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-
     def predict(self,test):
-        return self.labels[self.model.predict(test,verbose=1).tolist()[0].index(1.)]
-        # prob = float(self.model.predict(test))
-        # print("------------------")
-        # print("Probability that a mushroom is poisonous: ",prob)
-
-
-    def isEdible(self,test):
-        return self.predict(test)
+        img = load_img(self.validation_data_dir+'/'+test.fruitName+'/'+test.picture) # this is a PIL image
+        x = img_to_array(img)  # this is a Numpy array with shape (3, 150, 150)
+        x = x.reshape((1,) + x.shape)
+        pred_vect = self.model.predict(x,verbose=1).tolist()[0]
+        print(pred_vect)
+        prediction = self.labels[pred_vect.index(1.)]
+        isInteresting = prediction in self.targetFruits
+        return [prediction,isInteresting]
